@@ -1,0 +1,152 @@
+
+
+import { handleResponse } from "../../utils/responseHandler"
+import { Request, Response } from 'express';
+import { adminProductService } from "../../services/admin/productService"
+
+
+
+
+export const adminProductController = {
+
+
+
+    addProduct: async (req: any, res: Response) => {
+
+        try {
+
+            const result = await adminProductService.addProduct(req?.user?._id, req.body)
+            handleResponse.handleSuccess(res, result, "product created successfully", 200);
+
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500)
+
+        }
+    },
+
+    updateProduct: async (req: Request, res: Response) => {
+
+        try {
+
+            const { proId } = req.params
+            const result = await adminProductService.updateProduct(proId, req.body)
+            handleResponse.handleSuccess(res, result, "product updated successfully", 200);
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500)
+
+
+        }
+
+    },
+
+    getAllProducts: async (req: Request, res: Response) => {
+
+        try {
+
+            const { search,
+                status,
+                isSuspend,
+                limit = 10,
+                page = 1 } = req.query
+
+            const result = await adminProductService.getAllProduct({
+                search,
+                status,
+                isSuspend,
+                limit: Number(limit),
+                page: Number(page)
+            })
+
+            handleResponse.handleSuccess(res, result, "Products fetched successfully", 200);
+
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500)
+
+        }
+
+    },
+
+    getProductsByID: async (req: Request, res: Response) => {
+
+        try {
+
+            const {proId}=req.params
+            
+            const result = await adminProductService.getProductById(proId)
+
+            handleResponse.handleSuccess(res, result, "Product fetched successfully", 200);
+
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500)
+
+        }
+
+    },
+
+
+    deleteProduct: async (req: Request, res: Response) => {
+
+        try {
+
+            const { proId } = req.params
+
+            const result = await adminProductService.deleteProduct(proId)
+            handleResponse.handleSuccess(res, result, "Products deleted successfully", 200);
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500)
+
+        }
+    },
+
+    verifyProduct: async (req: Request, res: Response) => {
+
+        try {
+
+            const { proId } = req.params
+            const { status } = req.body
+
+            const result = await adminProductService.verifyProduct(proId, status)
+            handleResponse.handleSuccess(res, result, `this product vefification is ${status}`, 200);
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500)
+
+        }
+    },
+
+
+    isSuspendProduct: async (req: Request, res: Response) => {
+
+        try {
+
+            const { proId } = req.params
+            const { status } = req.body
+
+            const result: any = await adminProductService.isSuspendProduct(proId, status)
+            handleResponse.handleSuccess(res, result, result.message, 200);
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500)
+
+        }
+    }
+
+
+
+
+}
