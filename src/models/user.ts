@@ -43,6 +43,11 @@ const UserSchema = new Schema<IUserType>({
         type: Boolean,
         default: false
     },
+    salesAgentOwner: {             // if this user is a sales agent, this field will hold the ID of the vendor who owns this sales agent
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        default: null
+    }
 
 }, { timestamps: true });
 

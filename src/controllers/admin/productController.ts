@@ -78,8 +78,8 @@ export const adminProductController = {
 
         try {
 
-            const {proId}=req.params
-            
+            const { proId } = req.params
+
             const result = await adminProductService.getProductById(proId)
 
             handleResponse.handleSuccess(res, result, "Product fetched successfully", 200);
@@ -93,6 +93,77 @@ export const adminProductController = {
         }
 
     },
+
+    getAllStocksByProdectId: async (req: Request, res: Response) => {
+
+        try {
+
+            const { proId } = req.params
+
+            const { search,
+                status,
+                isSuspend,
+                limit = 10,
+                page = 1 } = req.query
+
+            const result = await adminProductService.getAllStocksByProdectId(proId, {
+                search,
+                status,
+                isSuspend,
+                limit: Number(limit),
+                page: Number(page)
+            })
+
+            handleResponse.handleSuccess(res, result, "Product stocks fetched successfully", 200);
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500)
+
+
+        }
+
+    },
+
+    verifyProductStockById: async (req: Request, res: Response) => {
+
+        try {
+
+            const { proId, reqId } = req.params
+            const { status } = req.body
+
+            const result: any = await adminProductService.verifyProductStockById(proId, reqId, status)
+
+            handleResponse.handleSuccess(res, result, result.message, 200);
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500)
+
+        }
+    },
+
+    isSuspendProductStock: async (req: Request, res: Response) => {
+
+        try {
+
+            const { proId, reqId } = req.params
+            const { isSuspend } = req.body
+
+            const result:any = await adminProductService.isSuspendProductStock(proId, reqId, isSuspend)
+
+            handleResponse.handleSuccess(res, result, result.message, 200);
+
+
+        } catch (error: any) {
+            handleResponse.handleError(res, "", error, 500)
+
+        }
+
+    },
+
 
 
     deleteProduct: async (req: Request, res: Response) => {

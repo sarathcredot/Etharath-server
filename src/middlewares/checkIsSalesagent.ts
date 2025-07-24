@@ -8,11 +8,11 @@ import { USER_ROLES } from "../utils/constants"
 import { Request, Response } from "express"
 
 
-export const checkIsRetailer = () => {
+export const checkIsSalesAgent = () => {
     return async (req: any, res: Response, next: any) => {
         console.log("role check")
         try {
-            if (req.user.role !== USER_ROLES.RETAILER) {
+            if (req.user.role !== USER_ROLES.SALES_EXECUTIVE) {
                 handleResponse.handleError(res, "", "Access denied', 'You do not have permission to perform this action", 403)
                 return;
             }

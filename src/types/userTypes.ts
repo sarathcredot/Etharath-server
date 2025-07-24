@@ -13,6 +13,7 @@ export interface IUserType extends Document {
     isSuspend?: boolean;
     password?: string;
     imgUrl?: string;
+    salesAgentOwner?: ObjectId | null;
 
 }
 
@@ -20,7 +21,7 @@ export interface IUserType extends Document {
 export type UserReqType = {
 
     userName: string;
-    email: string;
+    email?: string;
     phoneNumber: string;
     role: string;
     password?: string;

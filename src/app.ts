@@ -9,7 +9,11 @@ import authRout from "./routes/auth"
 import kycRout from "./routes/kyc"
 import userRouter from "./routes/user"
 
-import venderRout from "./routes/vender"
+import vendorRout from "./routes/vender"
+
+import retailerRoute from "./routes/retailer"
+
+import salesAgent from "./routes/salesAgent"
 
 // Load environment variables
 dotenv.config();
@@ -41,9 +45,15 @@ app.use("/api/admin",adminRout)
 
 // vender routers
 
-app.use("/api/vender",venderRout)
+app.use("/api/vendor",vendorRout)
 
+// sales agent routers
 
+app.use("/api/salesAgent",salesAgent)
+
+// retailer routers
+
+app.use("/api/retailer",retailerRoute)
 
 
 

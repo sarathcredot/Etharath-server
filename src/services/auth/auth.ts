@@ -4,7 +4,7 @@ import { Otp } from "../../models/otp"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { genarateOtp } from "../../utils/otp"
-import {VERIFY_STATUS} from "../../utils/constants"
+import {VERIFY_STATUS,USER_ROLES} from "../../utils/constants"
 
 
 
@@ -24,9 +24,9 @@ export const authService = {
                     ]
                 });
 
-                if (data.role === "admin") {
+                if (data.role === USER_ROLES.ADMIN || USER_ROLES.SALES_EXECUTIVE ) {
 
-                    throw new Error("select valid type for user")
+                    throw new Error("please select valid type for user")
                 }
 
                 if (existUser) {

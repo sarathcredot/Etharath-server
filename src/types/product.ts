@@ -44,3 +44,25 @@ export  type GetallArrgu={
     page:number,
     limit:number
 }
+
+export type AccessRequesType = {
+
+    productId: ObjectId,
+    requestedBy: ObjectId,
+    stock: number,
+    location: string,
+    price: number
+
+}
+
+
+export type ProductStockVenderType = {
+
+    
+    stock: number,
+    location: string,
+    price: number,
+    
+}
+
+

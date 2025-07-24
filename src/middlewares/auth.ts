@@ -6,8 +6,8 @@ import { User } from "../models/user"
 import { verify } from "jsonwebtoken"
 
 
- export const auth = async (req: any, res: Response, next: any) => {
-
+export const auth = async (req: any, res: Response, next: any) => {
+console.log("auth check")
 
     try {
         const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -26,9 +26,10 @@ import { verify } from "jsonwebtoken"
 
         req.user = user;
         req.token = token;
+        
         next();
     } catch (error) {
-console.log("err",error)
+        console.log("err", error)
         handleResponse.handleError(res, "", "Please authenticate", 401)
     }
 
