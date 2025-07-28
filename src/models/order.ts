@@ -55,11 +55,25 @@ const orderSchema = new Schema<IorderType>({
         type: String,
 
     },
+    orderDate: {
+        type: Date,
+        default: Date.now
+    },
     assignedToSalesAgent: {
         type: Schema.Types.ObjectId,
         ref: "User"
 
+    },
+    assignedDate:{
+        type:Date
+    },
+    deliveryDate:{
+        type:Date
+    },
+    cancelledDate:{
+        type:Date
     }
+
 
 
 },

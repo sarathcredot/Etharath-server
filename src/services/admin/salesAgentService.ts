@@ -2,28 +2,14 @@
 import { User } from "../../models/user"
 import { USER_ROLES } from "../../utils/constants"
 import { UserReqType } from "../../types/userTypes"
+import mongoose from "mongoose"
 
 
-export const vendorSalesAgentService = {
 
-    getSalesAgents: async (vendorId: any) => {
+export const adminSalesAgentService = {
 
-        return new Promise(async (resolve, reject) => {
 
-            try {
-
-                const result = await User.find({ salesAgentOwner: vendorId })
-
-                resolve(result)
-
-            } catch (error: any) {
-
-                reject(error.message)
-            }
-        })
-    },
-
-    createSalesAgent: async ( vendorId:any,data: UserReqType) => {
+    createSalesAgent: async (vendorId: any, data: UserReqType) => {
 
 
         return new Promise(async (resolve, reject) => {
@@ -50,7 +36,7 @@ export const vendorSalesAgentService = {
                 const final = new User({
 
                     ...data,
-                    salesAgentOwner:vendorId
+                    salesAgentOwner: vendorId
                 })
 
                 const result = await final.save()
@@ -66,22 +52,45 @@ export const vendorSalesAgentService = {
 
     },
 
-    getSalesAgentById: (salesAgentId: any) => {
+    getAllSalesAgents: async () => {
 
         return new Promise(async (resolve, reject) => {
+
             try {
-                const salesAgent = await User.findById(salesAgentId)
 
-                if (!salesAgent) {
-                    throw new Error("Sales Agent not found");
-                }
 
-                resolve(salesAgent);
+                const result = await User.aggregate([
+
+                    {
+                        $match: {
+                            role: USER_ROLES.SALES_EXECUTIVE
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "users",
+                            localField: "salesAgentOwner",
+                            foreignField: "_id",
+                            as: "vendorDetails"
+                        }
+                    },
+                    {
+                        $unwind: {
+                            path: "$vendorDetails",
+                            preserveNullAndEmptyArrays: true
+                        }
+                    }
+                ])
+
+                resolve(result)
+
             } catch (error: any) {
-                reject(error.message);
+
+                reject(error.message)
             }
         })
     },
+
 
     isSuspendSalesAgent: (salesAgentId: any, isSuspend: boolean) => {
         return new Promise(async (resolve, reject) => {
@@ -113,10 +122,6 @@ export const vendorSalesAgentService = {
         })
     },
 
-    
 
 }
-
-
-
 

@@ -1,32 +1,83 @@
 
 import { UserRole } from "../types/userTypes"
-import { KycType , VerifyType} from "../types/userTypes"
+import { KycType, VerifyType } from "../types/userTypes"
 
+
+type OrderStatusType = {
+
+  PENDING: 'pending';
+  IN_PROGRESS: 'in-progress';
+  DELIVERED: 'delivered';
+  CANCELLED: 'cancelled';
+}
+
+// type ClaimStatusType = {
+//   PENDING: 'pending';
+//   APPROVED: 'approved';
+//   REJECTED: 'rejected';
+//   CANCELLED: 'cancelled';
+//   COMPLETED: 'completed';
+
+// }
 
 
 
 const ROLES: UserRole = {
 
-    ADMIN: "admin",
-    VENDER: "vender",
-    RETAILER: "retailer",
-    SALES_EXECUTIVE: "sales_executive"
+  ADMIN: "admin",
+  VENDER: "vender",
+  RETAILER: "retailer",
+  SALES_EXECUTIVE: "sales_executive"
 }
 
 export const USER_ROLES = ROLES
 
 
-export const KYC_STATUS:KycType = {
+export const KYC_STATUS: KycType = {
   PENDING: 'pending',
   APPROVED: 'approved',
   REJECTED: 'rejected',
-} ;
+};
 
 
-export const VERIFY_STATUS:VerifyType = {
+export const VERIFY_STATUS: VerifyType = {
   PENDING: 'pending',
   APPROVED: 'approved',
   REJECTED: 'rejected',
-} ;
+};
+
+
+export const OrderStatus: OrderStatusType = {
+
+  PENDING: 'pending',
+  IN_PROGRESS: 'in-progress',
+  DELIVERED: 'delivered',
+  CANCELLED: 'cancelled',
+
+
+}
+
+
+
+
+
+// export const ClaimStatus: ClaimStatusType = {
+//   PENDING: 'pending',
+//   APPROVED: 'approved',
+//   REJECTED: 'rejected',
+//   CANCELLED: 'cancelled',
+//   COMPLETED: 'completed',
+// };
+
+
+export enum ClaimStatus {
+  PENDING = 'pending',
+  IN_PROGRESS = 'in-progress',
+  VERIFIED = 'verified',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+  CANCELLED = 'cancelled',
+  COMPLETED = 'completed',
+}
 
 

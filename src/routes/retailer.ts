@@ -7,6 +7,7 @@ import { auth } from "../middlewares/auth"
 import { checkIsRetailer } from "../middlewares/checkIsRetailer";
 import retailerProductRouter from "./retailer/product"
 import retailerOrderRouter from "./retailer/order"
+import retailerCliamRouter from "./retailer/claim"
 
 
 
@@ -21,8 +22,8 @@ router.use(checkIsRetailer())
 
 
 router.use("/product",retailerProductRouter)
-
 router.use("/order",retailerOrderRouter)
+router.use("/claim",retailerCliamRouter)
 
 
 

@@ -1,36 +1,37 @@
 
 
 import { Order } from "../../models/order"
-import { OrderType } from "../../types/order"
-import { Product, ProductStockVender } from "../../models/product"
-import { GetallArrgu, } from "../../types/product"
-import { VERIFY_STATUS } from "../../utils/constants"
+import { GetallArrgu } from "../../types/product"
 
 
 
 
-export const vendorOrderService = {
+export const adminOrderService = {
 
-    getAllMyOrders: (userId: any, { search, status, page, limit }: GetallArrgu) => {
+
+    getAllOrders: (data: GetallArrgu) => {
 
         return new Promise(async (resolve, reject) => {
 
 
             try {
 
-                let query: any = { vendorId: userId }
+                const query: any = {}
 
-                if (search) {
+                if (data.search) {
+
                     query.$or = [
-                        { orderId: { $regex: search, $options: 'i' } },
-                    ];
+                        { orderId: { $regex: data.search, $options: 'i' } },
+                    ]
                 }
 
-                if (status) {
-                    query.status = status
+                if (data.status) {
+
+                    query.status = data.status
                 }
 
-                const skip = (page - 1) * limit;
+
+                const skip = (data.page - 1) * data.limit;
 
                 const [orders, total] = await Promise.all([
                     Order.aggregate([
@@ -81,7 +82,8 @@ export const vendorOrderService = {
                             $skip: skip
                         },
                         {
-                            $limit: limit
+                            $limit: data.limit
+
                         }
                     ]),
                     Order.countDocuments(query)
@@ -91,12 +93,11 @@ export const vendorOrderService = {
 
                     result: orders,
                     total,
-                    currentPage: page,
-                    totalPages: Math.ceil(total / limit),
+                    currentPage: data.page,
+                    totalPages: Math.ceil(total / data.limit),
                     message: "Orders fetched successfully",
 
                 });
-
 
 
 
@@ -107,8 +108,8 @@ export const vendorOrderService = {
                 reject(error.message)
 
             }
-        })
 
+        })
     },
 
     getOrderById: (orderId: any) => {
@@ -180,17 +181,15 @@ export const vendorOrderService = {
                     }
 
                     updateFields.assignedToSalesAgent = assignedTo;
-                    updateFields.assignedDate = new Date();
+                    updateFields
                 }
 
                 if (status === "delivered") {
                     updateFields.deliveryDate = new Date();
                 }
-
                 if (status === "cancelled") {
                     updateFields.cancelledDate = new Date();
                 }
-
 
 
                 const updatedOrder = await Order.findByIdAndUpdate(orderId, {
@@ -215,4 +214,15 @@ export const vendorOrderService = {
     }
 
 
+
+
+
+
+
+
+
 }
+
+
+
+

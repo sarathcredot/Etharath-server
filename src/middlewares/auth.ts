@@ -20,8 +20,15 @@ console.log("auth check")
         const decoded: any = verify(token, process.env.JWT_SECRET || "");
         const user = await User.findOne({ _id: decoded.userId });
 
+        
+
         if (!user) {
             throw new Error();
+        }
+
+        if(user.isSuspend){
+
+             throw new Error("Your account is suspended. Please contact support.");
         }
 
         req.user = user;

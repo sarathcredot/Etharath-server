@@ -33,7 +33,7 @@ export const retailerOrderService = {
                     throw new Error("you cannot place order for this stock")
                 }
 
-                const orderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`
+                const orderId = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
 
                 const final = new Order({
                     orderId: orderId,
@@ -159,7 +159,7 @@ export const retailerOrderService = {
                     {
                         $unwind: "$productDetails"
                     },
-                   
+
                 ]);
 
                 if (!order) {
@@ -186,11 +186,11 @@ export const retailerOrderService = {
                 }
 
                 resolve(order);
-           
+
             } catch (error: any) {
-                
+
                 reject(error.message);
-           
+
 
             }
         });

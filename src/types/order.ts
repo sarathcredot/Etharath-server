@@ -18,6 +18,10 @@ export type IorderType = {
     status: string,
     paymentStatus: string,
     paymentMethod: string,
+    orderDate: Date,
+    assignedDate:Date,
+    deliveryDate:Date,
+    cancelledDate:Date,
     assignedToSalesAgent: ObjectId,
 }
 
