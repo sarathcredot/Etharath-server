@@ -12,7 +12,7 @@ import { validation } from "../../utils/validation"
 
 router.get("/:userId/kyc-details", adminKycController.getUserKycDetails)
 
-router.post("/:userId/create-kyc",validation(kycDetailsSchemaForAdmin), adminKycController.createUserKycDetails)
+router.post("/:userId/create-kyc",validation(kycDetailsSchemaForAdmin),  adminKycController.createUserKycDetails)
 
 
 router.put("/:userId/update-kyc",validation(kycDetailsSchemaForAdmin), adminKycController.updateUserKycDetails)

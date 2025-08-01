@@ -23,7 +23,7 @@ export const vendorSalesAgentService = {
         })
     },
 
-    createSalesAgent: async ( vendorId:any,data: UserReqType) => {
+    createSalesAgent: async (vendorId: any, data: UserReqType) => {
 
 
         return new Promise(async (resolve, reject) => {
@@ -32,9 +32,9 @@ export const vendorSalesAgentService = {
             try {
 
 
-                if (data.role !== USER_ROLES.SALES_EXECUTIVE) {
-                    throw new Error("Invalid role selected ");
-                }
+                // if (data.role !== USER_ROLES.SALES_EXECUTIVE) {
+                //     throw new Error("Invalid role selected ");
+                // }
 
                 const existUser: any = await User.findOne({
                     $or: [
@@ -50,7 +50,8 @@ export const vendorSalesAgentService = {
                 const final = new User({
 
                     ...data,
-                    salesAgentOwner:vendorId
+                    salesAgentOwner: vendorId,
+                    role: USER_ROLES.SALES_EXECUTIVE
                 })
 
                 const result = await final.save()
@@ -113,7 +114,7 @@ export const vendorSalesAgentService = {
         })
     },
 
-    
+
 
 }
 

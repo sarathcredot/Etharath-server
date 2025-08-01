@@ -32,7 +32,7 @@ export type UserReqType = {
 export type UserRole = {
 
     ADMIN: 'admin';
-    VENDER: "vender";
+    VENDER: "vendor";
     RETAILER: "retailer";
     SALES_EXECUTIVE: "sales_executive";
 }

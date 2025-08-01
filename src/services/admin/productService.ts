@@ -71,7 +71,7 @@ export const adminProductService = {
         });
     },
 
-    getProductById: (proID: any) => {
+    getProductById: (proID: string) => {
         return new Promise(async (resolve, reject) => {
             try {
 
@@ -95,10 +95,12 @@ export const adminProductService = {
 
                 ])
 
-                if (!product) {
+                if (product.length===0) {
 
                     throw new Error("product not found")
                 }
+
+                console.log("pro",product)
 
                 resolve(product[0])
 
@@ -338,7 +340,7 @@ export const adminProductService = {
 
             try {
 
-                const result = await Product.findByIdAndDelete({ id: proId })
+                const result = await Product.findByIdAndDelete({ _id: proId })
 
                 if (!result) {
 

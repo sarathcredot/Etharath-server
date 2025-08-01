@@ -7,13 +7,13 @@ import { adminUserController } from "../../controllers/admin/userController"
 import { adminUpdateUserSchema } from "../../schema.ts/admin/userSchema"
 import {UserRegisterSchema , getAllUsersSchema } from "../../schema.ts/auth"
 
-import { validation } from "../../utils/validation"
+import { validation , validationForGet} from "../../utils/validation"
 
 
 
 
 
-router.get("/",validation(getAllUsersSchema), adminUserController.getAllUsers)
+router.get("/",validationForGet(getAllUsersSchema), adminUserController.getAllUsers)
 
 router.get("/:id", adminUserController.getUserById)
 router.put("/:id", validation(adminUpdateUserSchema), adminUserController.updateUserById)

@@ -9,10 +9,10 @@ import { adminUserService } from "../../services/admin/userService";
 export const adminUserController = {
 
 
-    getAllUsers: async (req: Request, res: Response) => {
+    getAllUsers: async (req: any, res: Response) => {
         try {
-            const venders = await adminUserService.getAllUsers(req.body.role);
-            handleResponse.handleSuccess(res, venders, `Fetched all ${req.body.role} successfully`, 200);
+            const venders = await adminUserService.getAllUsers(req.query.role);
+            handleResponse.handleSuccess(res, venders, `Fetched all ${req.query.role} successfully`, 200);
         } catch (error: any) {
             handleResponse.handleError(res, "", error, 500);
         }
@@ -52,7 +52,7 @@ export const adminUserController = {
             const vender = await adminUserService.createUser(req.body);
             handleResponse.handleSuccess(res, vender, "Created successfully", 200);
         } catch (error: any) {
-            handleResponse.handleError(res, "", error, 500);
+            handleResponse.handleError(res, "", error.message, 500);
         }
     }
 }

@@ -70,5 +70,5 @@ export const kycDetailsSchemaForAdmin = z.object({
     city: z.string().nonempty("City is required").trim().min(1, "City is required"),
     poBox: z.string().optional()
   }),
-  kycStatus: z.enum(["pending", "approved", "rejected"])
+  // kycStatus: z.enum(["pending", "approved", "rejected"])
 });

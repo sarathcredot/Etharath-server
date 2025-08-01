@@ -25,7 +25,7 @@ type OrderStatusType = {
 const ROLES: UserRole = {
 
   ADMIN: "admin",
-  VENDER: "vender",
+  VENDER: "vendor",
   RETAILER: "retailer",
   SALES_EXECUTIVE: "sales_executive"
 }
@@ -61,13 +61,6 @@ export const OrderStatus: OrderStatusType = {
 
 
 
-// export const ClaimStatus: ClaimStatusType = {
-//   PENDING: 'pending',
-//   APPROVED: 'approved',
-//   REJECTED: 'rejected',
-//   CANCELLED: 'cancelled',
-//   COMPLETED: 'completed',
-// };
 
 
 export enum ClaimStatus {

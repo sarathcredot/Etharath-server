@@ -22,7 +22,7 @@ router.delete("/:reqId", vendorProductController.deleteProductStock)
 
 router.get("/:proId", vendorProductController.getProductsByID)
 
-router.get("/:proId/product-access-req", vendorProductController.productAccessRequestByVender)
+router.post("/:proId/product-access-req", vendorProductController.productAccessRequestByVender)
 
 
 

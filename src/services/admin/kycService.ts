@@ -120,7 +120,7 @@ export const adminKycService = {
                 )
 
                 // when admin kyc status change update user active filed
-                if (data.status === "approve") {
+                if (data.status === VERIFY_STATUS.APPROVED) {
 
                     await User.findOneAndUpdate({ _id: result?.createdBy }, {
 
@@ -130,7 +130,7 @@ export const adminKycService = {
                     },
                         { new: true }
                     )
-                } else if (data.status === "pending") {
+                } else if (data.status === VERIFY_STATUS.PENDING) {
 
                     await User.findOneAndUpdate({ _id: result?.createdBy }, {
 

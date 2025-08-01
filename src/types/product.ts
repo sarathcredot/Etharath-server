@@ -32,17 +32,18 @@ export type ProductType = {
     brand: ObjectId,
     category: string,
     imageUrl: string,
-    
+
 }
 
 
-export  type GetallArrgu={
+export type GetallArrgu = {
 
-    search:any,
-    status?:any,
-    isSuspend?:any,
-    page:number,
-    limit:number
+    search: any,
+    status?: any,
+    isSuspend?: any,
+    page: number,
+    limit: number,
+    role?: string
 }
 
 export type AccessRequesType = {
@@ -58,11 +59,11 @@ export type AccessRequesType = {
 
 export type ProductStockVenderType = {
 
-    
+
     stock: number,
     location: string,
     price: number,
-    
+
 }
 
 
