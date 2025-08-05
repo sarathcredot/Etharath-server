@@ -24,7 +24,7 @@ export const authService = {
                     ]
                 });
 
-                if (data.role === USER_ROLES.ADMIN || USER_ROLES.SALES_EXECUTIVE ) {
+                if (data.role === USER_ROLES.ADMIN || data.role === USER_ROLES.SALES_EXECUTIVE  ) {
 
                     throw new Error("please select valid type for user")
                 }

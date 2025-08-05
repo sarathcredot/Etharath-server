@@ -6,8 +6,8 @@ import { retailerOrderController } from "../../controllers/retailer/order"
 
 
 
-router.post("/place-order", retailerOrderController.placeOrder)
-router.get("/my-orders", retailerOrderController.getAllMyOrders)
+router.post("/", retailerOrderController.placeOrder)
+router.get("/", retailerOrderController.getAllMyOrders)
 router.get("/:orderId", retailerOrderController.getOrderById)
 router.put("/:orderId/cancel", retailerOrderController.cancelMyOrderById)
 
