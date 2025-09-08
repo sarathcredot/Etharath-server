@@ -1,5 +1,6 @@
 
 
+
 import { ProductType, GetallArrgu, AccessRequesType, ProductStockVenderType } from "../../types/product"
 import { Product, ProductStockVender } from "../../models/product"
 import { VERIFY_STATUS } from "../../utils/constants"
@@ -8,7 +9,7 @@ import mongoose, { Schema, model, Document, ObjectId } from 'mongoose';
 
 
 
-export const vendorProductService = {
+export const salesAgentProductService = {
 
     getAllProduct: ({ search, page, limit }: GetallArrgu) => {
         return new Promise(async (resolve, reject) => {
@@ -104,53 +105,37 @@ export const vendorProductService = {
 
             try {
 
-                const query = { productId: new mongoose.Types.ObjectId(proId), isVerified: "approved", isSuspend: false }
-
                 const skip = (page - 1) * limit;
 
-                const [stock, total] = await Promise.all([
+                const productStock = await ProductStockVender.aggregate([
 
-                    ProductStockVender.aggregate([
+                    {
+                        $match: { productId: new mongoose.Types.ObjectId(proId) }
+                    },
 
-                        {
-                            $match: query
-                        },
-
-                        {
-                            $lookup: {
-                                from: "users",
-                                localField: "requestedBy",
-                                foreignField: "_id",
-                                as: "requestedBy"
-                            }
-                        },
-                        {
-                            $unwind: "$requestedBy"
-                        },
-                        {
-                            $sort: { createdAt: -1 }
-                        },
-                        {
-                            $skip: skip
-                        },
-                        {
-                            $limit: limit
+                    {
+                        $lookup: {
+                            from: "users",
+                            localField: "requestedBy",
+                            foreignField: "_id",
+                            as: "requestedBy"
                         }
-                    ]),
+                    },
+                    {
+                        $unwind: "$requestedBy"
+                    },
+                    {
+                        $sort: { createdAt: -1 }
+                    },
+                    {
+                        $skip: skip
+                    },
+                    {
+                        $limit: limit
+                    }
+                ]);
 
-                    ProductStockVender.countDocuments(query)
-
-                ])
-
-
-
-                resolve({
-                    result: stock,
-                    total,
-                    currentPage: page,
-                    totalPages: Math.ceil(total / limit),
-                    message: "Products stocks fetch successfully",
-                });
+                resolve(productStock);
 
             } catch (error: any) {
 

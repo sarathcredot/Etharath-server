@@ -17,41 +17,45 @@ export const retailerOrderService = {
             try {
 
 
-                const orderStokDetails: any = await ProductStockVender.findById({ _id: data.stockByVendor })
-                const productDetails = await Product.findById({ _id: orderStokDetails.productId })
+
+                for (let stockId of data.stockByVendor) {
+
+                    const orderStokDetails: any = await ProductStockVender.findById({ _id: stockId })
+                    const productDetails = await Product.findById({ _id: orderStokDetails.productId })
 
 
 
-                if (!orderStokDetails || !productDetails) {
-                    throw new Error("Stock details not found")
+                    if (!orderStokDetails || !productDetails) {
+                        throw new Error("Stock details not found")
+                    }
+                    if (orderStokDetails.isSuspend
+                        || orderStokDetails.isVerified !== "approved"
+                        || productDetails.isSuspend
+                        || productDetails.isVerified !== "approved"
+                    ) {
+                        throw new Error("you cannot place order for this stock")
+                    }
+
+                    const orderId = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+
+
+                    const final = new Order({
+                        orderId: orderId,
+                        userId: userId,
+                        stockIdByVendor: orderStokDetails._id,
+                        vendorId: orderStokDetails.requestedBy,
+                        quantity: data.quantity,
+                        price: orderStokDetails.price,
+                        totalPrice: data.quantity * orderStokDetails.price,
+                        status: "pending",
+                        paymentStatus: "unpaid",
+
+
+                    })
+                    await final.save()
                 }
-                if (orderStokDetails.isSuspend
-                    || orderStokDetails.isVerified !== "verified"
-                    || productDetails.isSuspend
-                    || productDetails.isVerified !== "verified"
-                ) {
-                    throw new Error("you cannot place order for this stock")
-                }
 
-                const orderId = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
-
-                const final = new Order({
-                    orderId: orderId,
-                    userId: userId,
-                    vendorId: orderStokDetails.requestedBy,
-                    productId: orderStokDetails.productId,
-                    stockByVendor: data.stockByVendor,
-                    quantity: data.quantity,
-                    price: orderStokDetails.price,
-                    totalPrice: data.totalPrice,
-                    status: "pending",
-                    paymentStatus: "unpaid",
-
-                })
-
-                const result = await final.save()
-
-                resolve(result)
+                resolve({})
 
 
 
@@ -61,6 +65,7 @@ export const retailerOrderService = {
             }
         })
     },
+
     getAllMyOrders: (userId: any, { search, status, limit, page }: GetallArrgu) => {
 
 
@@ -89,8 +94,20 @@ export const retailerOrderService = {
                         },
                         {
                             $lookup: {
+                                from: "productstockvenders",
+                                localField: "stockIdByVendor",
+                                foreignField: "_id",
+                                as: "stockDetails"
+                            }
+                        },
+                        {
+                            $unwind: "$stockDetails"
+                        },
+
+                        {
+                            $lookup: {
                                 from: "products",
-                                localField: "productId",
+                                localField: "stockDetails.productId",
                                 foreignField: "_id",
                                 as: "productDetails"
                             }
@@ -98,6 +115,7 @@ export const retailerOrderService = {
                         {
                             $unwind: "$productDetails"
                         },
+
                         {
                             $sort: { createdAt: -1 }
                         },
@@ -129,6 +147,7 @@ export const retailerOrderService = {
         })
 
     },
+
     getOrderById: (orderId: any) => {
         return new Promise(async (resolve, reject) => {
             try {
@@ -138,9 +157,26 @@ export const retailerOrderService = {
                         $match: { _id: orderId }
                     },
                     {
+                        $unwind: "$products"
+                    },
+
+
+                    {
+                        $lookup: {
+                            from: "productstockvenders",
+                            localField: "stockIdByVendor",
+                            foreignField: "_id",
+                            as: "stockDetails"
+                        }
+                    },
+                    {
+                        $unwind: "$stockDetails"
+                    },
+
+                    {
                         $lookup: {
                             from: "products",
-                            localField: "productId",
+                            localField: "stockDetails.productId",
                             foreignField: "_id",
                             as: "productDetails"
                         }
@@ -148,17 +184,7 @@ export const retailerOrderService = {
                     {
                         $unwind: "$productDetails"
                     },
-                    {
-                        $lookup: {
-                            from: "brands",
-                            localField: "productDetails.brand",
-                            foreignField: "_id",
-                            as: "brand"
-                        }
-                    },
-                    {
-                        $unwind: "$productDetails"
-                    },
+
 
                 ]);
 
@@ -172,6 +198,9 @@ export const retailerOrderService = {
             }
         });
     },
+
+
+
     cancelMyOrderById: (orderId: any) => {
         return new Promise(async (resolve, reject) => {
             try {

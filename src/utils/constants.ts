@@ -49,7 +49,7 @@ export const VERIFY_STATUS: VerifyType = {
 
 export const OrderStatus: OrderStatusType = {
 
-  PENDING: 'pending',
+  PENDING: "pending",
   IN_PROGRESS: 'in-progress',
   DELIVERED: 'delivered',
   CANCELLED: 'cancelled',

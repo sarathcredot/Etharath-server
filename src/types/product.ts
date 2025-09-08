@@ -18,7 +18,9 @@ export interface IProductType extends Document {
     imageUrl: string,
     isVerified: string,
     isSuspend: Boolean,
-    createdBY: ObjectId
+    createdBY: ObjectId,
+    origin: string,
+    yearOfManufacturer: string
 
 
 }

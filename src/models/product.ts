@@ -29,6 +29,16 @@ const productSchema = new Schema<IProductType>({
         type: String,
         required: true
     },
+    origin: {
+
+        type: String,
+        required: true
+    },
+    yearOfManufacturer: {
+
+        type: String,
+        required: true
+    },
     isVerified: {
         type: String,
         default: VERIFY_STATUS.PENDING
@@ -41,12 +51,7 @@ const productSchema = new Schema<IProductType>({
 
         type: Schema.Types.ObjectId,
         required: true
-
     }
-
-
-
-
 
 
 
@@ -69,7 +74,7 @@ const ProductStocksSchema = new Schema({
     },
     stock: {
         type: String,
-        default:0,
+        default: 0,
 
     },
     location: {
@@ -77,10 +82,10 @@ const ProductStocksSchema = new Schema({
         type: String,
         required: true
     },
-    price:{
+    price: {
 
-        type:Number,
-        default:0
+        type: Number,
+        default: 0
 
     },
     isVerified: {
@@ -94,13 +99,15 @@ const ProductStocksSchema = new Schema({
 
     }
 },
-{
-    timestamps:true
-}
+
+    {
+        timestamps: true
+    }
+
 )
 
 
 
 export const Product = model<IProductType>("Product", productSchema)
 
-export const ProductStockVender=model("ProductStocksVender",ProductStocksSchema)
+export const ProductStockVender = model("ProductStocksVender", ProductStocksSchema)

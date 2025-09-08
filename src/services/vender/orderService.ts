@@ -5,6 +5,8 @@ import { OrderType } from "../../types/order"
 import { Product, ProductStockVender } from "../../models/product"
 import { GetallArrgu, } from "../../types/product"
 import { VERIFY_STATUS } from "../../utils/constants"
+import mongoose from "mongoose";
+
 
 
 
@@ -17,8 +19,9 @@ export const vendorOrderService = {
 
 
             try {
+                console.log("user id", userId)
 
-                let query: any = { vendorId: userId }
+                let query: any = { vendorId: new mongoose.Types.ObjectId(userId) }
 
                 if (search) {
                     query.$or = [
@@ -37,28 +40,33 @@ export const vendorOrderService = {
                         {
                             $match: query
                         },
+
+
+
+                        {
+                            $lookup: {
+                                from: "productstockvenders",
+                                localField: "stockIdByVendor",
+                                foreignField: "_id",
+                                as: "stockDetails"
+                            }
+                        },
+                        {
+                            $unwind: "$stockDetails"
+                        },
+
                         {
                             $lookup: {
                                 from: "products",
-                                localField: "productId",
+                                localField: "stockDetails.productId",
                                 foreignField: "_id",
                                 as: "productDetails"
                             }
                         },
                         {
-                            $lookup: {
-                                from: "brand",
-                                localField: "productDetails.brand",
-                                foreignField: "_id",
-                                as: "brandDetails"
-                            }
-                        },
-                        {
-                            $unwind: "$brandDetails"
-                        },
-                        {
                             $unwind: "$productDetails"
                         },
+
 
                         {
                             $lookup: {
@@ -70,6 +78,18 @@ export const vendorOrderService = {
                         },
                         {
                             $unwind: "$userDetails"
+                        },
+
+                        {
+                            $lookup: {
+                                from: "brands",
+                                localField: "productDetails.brand",
+                                foreignField: "_id",
+                                as: "brandDetails"
+                            }
+                        },
+                        {
+                            $unwind: "$brandDetails"
                         },
 
 
@@ -87,6 +107,9 @@ export const vendorOrderService = {
                     Order.countDocuments(query)
                 ]);
 
+
+
+
                 resolve({
 
                     result: orders,
@@ -96,9 +119,6 @@ export const vendorOrderService = {
                     message: "Orders fetched successfully",
 
                 });
-
-
-
 
 
 
@@ -117,12 +137,26 @@ export const vendorOrderService = {
                 const order = await Order.aggregate([
 
                     {
-                        $match: { _id: orderId }
+                        $match: { _id: orderId}
                     },
+                  
+
+                    {
+                        $lookup: {
+                            from: "productstockvenders",
+                            localField: "stockIdByVendor",
+                            foreignField: "_id",
+                            as: "stockDetails"
+                        }
+                    },
+                    {
+                        $unwind: "$stockDetails"
+                    },
+
                     {
                         $lookup: {
                             from: "products",
-                            localField: "productId",
+                            localField: "stockDetails.productId",
                             foreignField: "_id",
                             as: "productDetails"
                         }
@@ -130,17 +164,7 @@ export const vendorOrderService = {
                     {
                         $unwind: "$productDetails"
                     },
-                    {
-                        $lookup: {
-                            from: "brand",
-                            localField: "productDetails.brand",
-                            foreignField: "_id",
-                            as: "brandDetails"
-                        }
-                    },
-                    {
-                        $unwind: "$brandDetails"
-                    },
+
                     {
                         $lookup: {
                             from: "users",

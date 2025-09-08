@@ -4,16 +4,16 @@ import dotenv from 'dotenv';
 import {handleResponse} from "./utils/responseHandler"
 
 
-import adminRout from "./routes/admin"
-import authRout from "./routes/auth"
-import kycRout from "./routes/kyc"
-import userRouter from "./routes/user"
+import adminRout from "./routers/admin"
+import authRout from "./routers/auth"
+import kycRout from "./routers/kyc"
+import userRouter from "./routers/user"
 
-import vendorRout from "./routes/vender"
+import vendorRout from "./routers/vender"
 
-import retailerRoute from "./routes/retailer"
+import retailerRoute from "./routers/retailer"
 
-import salesAgent from "./routes/salesAgent"
+import salesAgent from "./routers/salesAgent"
 
 // Load environment variables
 dotenv.config();
@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // test route
 app.get('/test', (req, res) => {
-  
+  console.log("hii")
     handleResponse.handleSuccess(res,"","server running",200)
 });
 

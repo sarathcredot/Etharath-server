@@ -59,6 +59,7 @@ export const authService = {
         })
     },
 
+
     login: (data: LoginDataType) => {
 
         return new Promise(async (resolve, reject) => {
@@ -194,7 +195,7 @@ export const authService = {
         })
     },
 
-
+      
 
     verifyOtp: (data: { emailOrPhoneNumber: string, otp: string }) => {
 

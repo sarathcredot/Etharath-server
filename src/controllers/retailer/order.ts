@@ -19,7 +19,7 @@ export const retailerOrderController = {
             handleResponse.handleSuccess(res, result, "Your order has been placed successfully", 201);
 
         } catch (error: any) {
-            handleResponse.handleError(res, "", error.message, 500);
+            handleResponse.handleError(res, "", error, 500);
 
         }
     },

@@ -1,13 +1,14 @@
 
 
+
 import { handleResponse } from "../../utils/responseHandler"
 import { Request, Response } from 'express';
-import { vendorProductService } from "../../services/retailer/product"
+import { salesAgentProductService } from "../../services/salesAgent/productService"
 
 
 
 
-export const retailerProductController = {
+export const salesAgentProductController = {
 
 
 
@@ -15,7 +16,7 @@ export const retailerProductController = {
         try {
             const { search, limit = 10,
                 page = 1 } = req.query;
-            const result = await vendorProductService.getAllProduct({
+            const result = await salesAgentProductService.getAllProduct({
                 search,
                 page: Number(page),
                 limit: Number(limit)
@@ -28,7 +29,7 @@ export const retailerProductController = {
     getProductsByID: async (req: Request, res: Response) => {
         try {
             const { proId } = req.params;
-            const result = await vendorProductService.getProductByID(proId);
+            const result = await salesAgentProductService.getProductByID(proId);
             handleResponse.handleSuccess(res, result, "Product fetched successfully", 200);
         } catch (error: any) {
             handleResponse.handleError(res, "", error.message, 500);
@@ -38,7 +39,7 @@ export const retailerProductController = {
         try {
             const { proId } = req.params;
             const { page = 1, limit = 10 } = req.query;
-            const result = await vendorProductService.productStockDetailsById(proId, Number(page), Number(limit));
+            const result = await salesAgentProductService.productStockDetailsById(proId, Number(page), Number(limit));
             handleResponse.handleSuccess(res, result, "Product stock details fetched successfully", 200);
         } catch (error: any) {
             handleResponse.handleError(res, "", error.message, 500);

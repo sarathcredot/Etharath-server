@@ -14,6 +14,7 @@ export const checkIsVendor = () => {
         handleResponse.handleError(res,"","Access denied', 'You do not have permission to perform this action",403)   
         return;
       }
+     
       console.log("role pass")
       next();
     } catch (error:any) {

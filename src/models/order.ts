@@ -7,17 +7,20 @@ import { IorderType } from "../types/order"
 
 const orderSchema = new Schema<IorderType>({
 
+    orderId: {
+
+        type: String,
+        required: true
+
+
+    },
     userId: {
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true
     },
-    productId: {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-        required: true
-    },
-    stockByVendor: {
+
+    stockIdByVendor: {
         type: Schema.Types.ObjectId,
         ref: "ProductStocksVendor",
         required: true
@@ -27,15 +30,15 @@ const orderSchema = new Schema<IorderType>({
         ref: "User",
         required: true
     },
-
     quantity: {
         type: Number,
-        required: true
+        default: 1
     },
     price: {
         type: Number,
         required: true
     },
+
     totalPrice: {
         type: Number,
         required: true
@@ -64,14 +67,14 @@ const orderSchema = new Schema<IorderType>({
         ref: "User"
 
     },
-    assignedDate:{
-        type:Date
+    assignedDate: {
+        type: Date
     },
-    deliveryDate:{
-        type:Date
+    deliveryDate: {
+        type: Date
     },
-    cancelledDate:{
-        type:Date
+    cancelledDate: {
+        type: Date
     }
 
 

@@ -6,7 +6,8 @@ import vendorOrderRouter from "./vender/order"
 import vendorSalesAgentRouter from "./vender/salesAgent"
 import vendorCliamRouter from "./vender/claim"
 import { auth } from "../middlewares/auth"
-import {checkIsVendor} from "../middlewares/checkIsVender"
+import { checkIsVendor } from "../middlewares/checkIsVender"
+import { verifyAccountIsSuspended } from "../middlewares/checkAccountActive"
 
 
 
@@ -19,10 +20,13 @@ router.use(auth)
 // is vendor check
 router.use(checkIsVendor())
 
+// check account is suspended
+router.use(verifyAccountIsSuspended)
 
 
-router.use("/product",venderProductRouter)
-router.use("/order",vendorOrderRouter)
+
+router.use("/product", venderProductRouter)
+router.use("/order", vendorOrderRouter)
 router.use("/sales-agent", vendorSalesAgentRouter)
 router.use("/claim", vendorCliamRouter)
 
