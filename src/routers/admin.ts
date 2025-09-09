@@ -12,6 +12,7 @@ import salesAgentRouter from "./admin/salesAgent"
 import orderRouter from "./admin/order"
 import claimRouter from "./admin/claim"
 import attributesRouter from "./admin/attributes"
+import proCategoryRouter from "./admin/proCategory"
 
 
 
@@ -34,6 +35,7 @@ router.use("/sales-agent", salesAgentRouter)
 router.use("/order", orderRouter)
 router.use("/claim", claimRouter)
 router.use("/attributes", attributesRouter)
+router.use("/procategory", proCategoryRouter)
 
 
 

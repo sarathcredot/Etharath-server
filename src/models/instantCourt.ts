@@ -31,13 +31,18 @@ const instantCourtSchema = new Schema<IInstantCountType>({
     },
     products: [
         {
-            productId: {
+            stockID: {
                 type: Schema.Types.ObjectId,
                 required: true,
                 ref: "Product"
 
             },
             quantity: {
+                type: Number,
+                required: true
+
+            },
+            price: {
                 type: Number,
                 required: true
 
@@ -49,7 +54,7 @@ const instantCourtSchema = new Schema<IInstantCountType>({
 
         }
     ],
-    totalAmmount: {
+    totalAmount: {
 
         type: Number,
         required: true

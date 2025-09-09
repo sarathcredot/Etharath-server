@@ -24,11 +24,13 @@ const productSchema = new Schema<IProductType>({
         type: String,
         required: true
     },
-    imageUrl: {
+    imageUrl: [
 
-        type: String,
-        required: true
-    },
+        {
+            type: String,
+            required: true
+        }
+    ],
     origin: {
 
         type: String,
@@ -36,8 +38,24 @@ const productSchema = new Schema<IProductType>({
     },
     yearOfManufacturer: {
 
-        type: String,
+        type: Number,
         required: true
+    },
+    width: {
+        type: Number,
+        required: true
+
+    },
+    height: {
+        type: Number,
+        required: true
+
+    },
+    size: {
+
+        type: Number,
+        required: true
+
     },
     isVerified: {
         type: String,
@@ -72,6 +90,7 @@ const ProductStocksSchema = new Schema({
         required: true
 
     },
+
     stock: {
         type: String,
         default: 0,
@@ -86,6 +105,13 @@ const ProductStocksSchema = new Schema({
 
         type: Number,
         default: 0
+
+    },
+    warrantyPeriod: {
+
+        type: Number,
+        required: true
+
 
     },
     isVerified: {

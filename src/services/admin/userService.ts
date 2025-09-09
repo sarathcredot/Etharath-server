@@ -8,23 +8,16 @@ export const
 
     adminUserService = {
 
-        getAllUsers: async (role:string) => {
+        getAllUsers: async (role: string) => {
             return new Promise(async (resolve, reject) => {
                 try {
-                    const venders = await User.find({ role:role });
+                    const venders = await User.find({ role: role });
                     resolve(venders);
                 } catch (error) {
                     reject(error);
                 }
             });
         },
-
-       
-
-
-
-
-
 
         getUserById: async (id: string) => {
             return new Promise(async (resolve, reject) => {
@@ -38,6 +31,7 @@ export const
                 }
             });
         },
+
         updateUserById: async (id: string, data: UserReqType) => {
             return new Promise(async (resolve, reject) => {
                 try {
@@ -50,6 +44,7 @@ export const
             });
 
         },
+
         isSuspendUserById: async (id: string, data: any) => {
             return new Promise(async (resolve, reject) => {
                 try {
@@ -61,10 +56,11 @@ export const
                 }
             });
         },
+
         createUser: async (data: UserReqType) => {
             return new Promise(async (resolve, reject) => {
                 try {
-                    const existVender = await User.findOne(
+                    const existUser = await User.findOne(
                         {
                             $or: [
                                 { email: data.email },
@@ -73,10 +69,10 @@ export const
                         }
                     );
 
-                    if (existVender) {
+                    if (existUser) {
                         throw new Error("user already exists with this email or phone number");
                     }
-                    const vender = await User.create(
+                    const user = await User.create(
                         {
                             ...data,
                             role: data.role,
@@ -84,7 +80,7 @@ export const
                             isSuspend: false
                         }
                     );
-                    resolve(vender);
+                    resolve(user);
                 }
                 catch (error) {
                     reject(error);

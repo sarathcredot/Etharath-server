@@ -14,6 +14,9 @@ export interface IUserType extends Document {
     password?: string;
     imgUrl?: string;
     salesAgentOwner?: ObjectId | null;
+    location: string,
+    eidNo: string,
+    eidFile: string
 
 }
 
@@ -89,7 +92,7 @@ export type KycDetails = {
 
 
 
-export type VerifyType={
+export type VerifyType = {
     PENDING: 'pending';
     APPROVED: 'approved';
     REJECTED: 'rejected';

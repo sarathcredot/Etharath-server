@@ -15,14 +15,18 @@ export const instantCourtService = {
             try {
 
                 let products = []
+                let totalAmount = 0
 
-                for (let item of (data.products as Array<{ productId: string; quantity: number; total: number }>)) {
+                for (let item of (data.products as Array<{ stockId: string; quantity: number; price: number; total: number }>)) {
 
                     products.push({
-                        productId: item.productId,
+                        stockId: item.stockId,
                         quantity: item.quantity,
-                        total: item.total
+                        price: item.price,
+                        total: item.quantity * item.price
                     })
+
+                    totalAmount = + (item.quantity * item.price)
                 }
 
 
@@ -32,7 +36,7 @@ export const instantCourtService = {
                     phoneNumber: data.phoneNumber,
                     email: data.email,
                     place: data.place,
-                    totalAmmount: data.totalAmmount,
+                    totalAmount: totalAmount,
                     products: products
                 })
 

@@ -15,12 +15,15 @@ export interface IProductType extends Document {
     productName: string,
     brand: ObjectId,
     category: string,
-    imageUrl: string,
+    imageUrl: string[],
     isVerified: string,
     isSuspend: Boolean,
     createdBY: ObjectId,
     origin: string,
-    yearOfManufacturer: string
+    yearOfManufacturer: number,
+    width: number,
+    height: number,
+    size: number
 
 
 }
@@ -33,7 +36,13 @@ export type ProductType = {
     productName: string,
     brand: ObjectId,
     category: string,
-    imageUrl: string,
+    imageUrl: string[],
+    origin: string,
+    yearOfManufacturer: string,
+    width: number,
+    height: number,
+    size: number
+
 
 }
 

@@ -1,6 +1,6 @@
 import { Schema, model, Document, ObjectId } from 'mongoose';
 import { IUserType } from '../types/userTypes';
-import { USER_ROLES ,VERIFY_STATUS} from '../utils/constants';
+import { USER_ROLES, VERIFY_STATUS } from '../utils/constants';
 
 
 
@@ -21,19 +21,19 @@ const UserSchema = new Schema<IUserType>({
         required: true,
         unique: true
     },
-    imgUrl:{
-        type:String,
+    imgUrl: {
+        type: String,
     },
     password: {
         type: String,
     },
-       
+
     role: {
         type: String,
         required: true,
         enum: USER_ROLES,
-        
-        
+
+
     },
     isVerified: {
         type: String,
@@ -47,6 +47,19 @@ const UserSchema = new Schema<IUserType>({
         type: Schema.Types.ObjectId,
         ref: 'User',
         default: null
+    },
+    location: {
+        type: String,
+        default: ""
+    },
+    eidNo: {
+
+        type: String,
+        default: ""
+    },
+    eidFile: {
+        type: String,
+        default: ""
     }
 
 }, { timestamps: true });
