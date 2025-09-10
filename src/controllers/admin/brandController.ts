@@ -23,7 +23,7 @@ export const brandControllerByAdmin = {
                 limit: Number(limit),
                 page: Number(page)
             })
-            console.log("res",result)
+            console.log("res", result)
             handleResponse.handleSuccess(res, result, "all brand find successfully", 200)
 
         } catch (error: any) {
@@ -52,7 +52,7 @@ export const brandControllerByAdmin = {
 
         try {
 
-            const {id}=req.params
+            const { id } = req.params
 
             const result = await BrandServiceByAdmin.getBrandsByID(id)
             handleResponse.handleSuccess(res, result, "brand find successfully", 200)
@@ -87,12 +87,20 @@ export const brandControllerByAdmin = {
         try {
 
             const { id } = req.params
-            const {status} =req.body
-            const result: any = await BrandServiceByAdmin.activeControllBrandDetails(id,status)
+            const { isActive } = req.body
+
+            
+
+            const result: any = await BrandServiceByAdmin.activeControllBrandDetails(id, isActive)
+
+            console.log("result", result)
+
             handleResponse.handleSuccess(res, result, result.message, 200)
 
 
         } catch (error: any) {
+
+            console.log("error", error)
 
             handleResponse.handleError(res, "", error, 500)
 

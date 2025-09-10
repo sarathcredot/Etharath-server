@@ -30,8 +30,8 @@ export const BrandServiceByAdmin = {
                     query.isActive = status
                 }
 
-               
-                 const skip = (page - 1) * limit;
+
+                const skip = (page - 1) * limit;
 
                 const [brands, total] = await Promise.all([
                     Brand.find(query)
@@ -116,7 +116,7 @@ export const BrandServiceByAdmin = {
                     throw new Error("this brand not exist")
                 }
 
-                const result = Brand.findByIdAndUpdate({ _id: id }, {
+                const result = await Brand.findByIdAndUpdate({ _id: id }, {
 
                     $set: {
                         ...data
@@ -135,7 +135,7 @@ export const BrandServiceByAdmin = {
         })
     },
 
-    activeControllBrandDetails: (id: any, status: boolean ) => {
+    activeControllBrandDetails: (id: any, isActive: boolean) => {
 
         return new Promise(async (resolve, reject) => {
 
@@ -148,11 +148,11 @@ export const BrandServiceByAdmin = {
                     throw new Error("this brand not exist")
                 }
 
-                const result = Brand.findByIdAndUpdate({ _id: id }, {
+                const result = await Brand.findByIdAndUpdate({ _id: id }, {
 
                     $set: {
-                        
-                        isActive:status
+
+                        isActive: isActive
                     },
 
                 }, {
@@ -161,10 +161,12 @@ export const BrandServiceByAdmin = {
 
                 resolve({
                     result,
-                    message: status ? "brand has been activated" : "brand has been deactivated."
+                    message: isActive ? "brand has been activated" : "brand has been deactivated."
                 });
 
             } catch (error: any) {
+
+                console.log("error", error)
 
                 reject(error.message)
             }
