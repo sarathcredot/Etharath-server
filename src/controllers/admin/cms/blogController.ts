@@ -102,5 +102,28 @@ export const blogController = {
             handleResponse.handleError(res, "", error, 500);
 
         }
+    },
+
+    updateBlogStatus: async (req: Request, res: Response) => {
+
+        try {
+
+            const { blogId } = req.params
+            const { status } = req.body
+
+            const result = await blogService.updateBlogStatus(blogId, status)
+
+            handleResponse.handleSuccess(res, result, "Blog status updated successfully", 200);
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500);
+
+
+        }
+
     }
+
+
 }

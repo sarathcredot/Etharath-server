@@ -3,6 +3,7 @@
 import { handleResponse } from "../../utils/responseHandler"
 import { Request, Response } from 'express';
 import { adminProductService } from "../../services/admin/productService"
+import { AccessRequesType } from "../../types/product";
 
 
 
@@ -152,7 +153,7 @@ export const adminProductController = {
             const { proId, reqId } = req.params
             const { isSuspend } = req.body
 
-            const result:any = await adminProductService.isSuspendProductStock(proId, reqId, isSuspend)
+            const result: any = await adminProductService.isSuspendProductStock(proId, reqId, isSuspend)
 
             handleResponse.handleSuccess(res, result, result.message, 200);
 
@@ -215,7 +216,91 @@ export const adminProductController = {
             handleResponse.handleError(res, "", error, 500)
 
         }
-    }
+    },
+
+
+    //  add stock to a product. use vendor id
+
+    addProductStockUserVendorId: async (req: any, res: Response) => {
+
+        try {
+
+            const { proId } = req.params
+
+            const data: AccessRequesType = {
+
+                productId: proId,
+                location: req.body.location,
+                price: req.body.price,
+                requestedBy: req.body.requestedBy,
+                stock: req.body.stock
+            }
+
+            const result = await adminProductService.addProductStockUseVendorId(data)
+
+            handleResponse.handleSuccess(res, result, "stock added successfully", 200);
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500)
+
+        }
+
+    },
+
+
+    // get productStockDetails by id
+
+
+    getProductStockById: async (req: any, res: Response) => {
+
+
+        try {
+
+            const { reqId } = req.params
+            const { proId } = req.params
+
+            const result = await adminProductService.getProductStockDetialsById(proId, reqId)
+
+            handleResponse.handleSuccess(res, result, "stock fetched successfully", 200);
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500)
+
+        }
+
+    },
+
+
+    //  update stock details. 
+
+
+    stockEditById: async (req: any, res: Response) => {
+
+        try {
+
+            const { reqId } = req.params
+
+            const data = {
+                stock: req.body.stock,
+                location: req.body.location,
+                price: req.body.price
+            }
+
+            const result = await adminProductService.updateProductStocksById(reqId, data)
+            handleResponse.handleSuccess(res, result, "Product stock updated successfully", 200);
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500)
+
+        }
+
+    },
+
 
 
 

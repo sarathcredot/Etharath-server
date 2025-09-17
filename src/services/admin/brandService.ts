@@ -1,6 +1,7 @@
 
 import tr from "zod/v4/locales/tr.cjs";
 import { Brand } from "../../models/brand"
+import { Product } from "../../models/product"
 import { BrandType } from "../../types/product"
 import { Schema, model, Document, ObjectId } from 'mongoose';
 import { GetallArrgu } from "../../types/product"
@@ -27,19 +28,41 @@ export const BrandServiceByAdmin = {
 
                 if (status) {
 
-                    query.isActive = status
+                    query.isActive = JSON.parse(status)
                 }
 
 
                 const skip = (page - 1) * limit;
 
                 const [brands, total] = await Promise.all([
-                    Brand.find(query)
-                        .skip(skip)
-                        .limit(limit)
-                        .sort({ createdAt: -1 }), // optional: sort by latest
+                    Brand.aggregate([
+                        { $match: query },
+                        {
+                            $lookup: {
+                                from: "products",
+                                localField: "_id",
+                                foreignField: "brand",
+                                as: "products",
+                            },
+                        },
+                        {
+                            $addFields: {
+                                productCount: { $size: "$products" },
+                            },
+                        },
+                        {
+                            $project: {
+                                products: 0,
+                            },
+                        },
+                        { $sort: { createdAt: -1 } },
+                        { $skip: skip },
+                        { $limit: limit },
+                    ]),
                     Brand.countDocuments(query),
                 ]);
+
+
 
                 resolve({
                     result: brands,
@@ -195,5 +218,26 @@ export const BrandServiceByAdmin = {
                 reject(error.message)
             }
         })
+    },
+
+    getAllProductsByBarandId: (brandId: any) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+                const result = await Product.find({ brand: brandId })
+
+                resolve(result)
+
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+
+        })
     }
+
+
 }

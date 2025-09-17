@@ -6,10 +6,12 @@ import { salesAgentOrderController } from "../../controllers/salesAgent/orderCon
 
 
 
-
-router.get("/",salesAgentOrderController.getAllMyAssignedOrders)
+router.get("/", salesAgentOrderController.getAllOrdersByLocation)
+router.get("/assigned", salesAgentOrderController.getAllMyAssignedOrders)
 router.get("/:orderId", salesAgentOrderController.getOrderById)
-router.put("/:orderId/update-status", salesAgentOrderController.updateOrderStatus)
+router.patch("/:orderId/update-status", salesAgentOrderController.updateOrderStatus)
+router.patch("/:orderId/self-assign", salesAgentOrderController.orderSelfAssigned)
+
 
 
 

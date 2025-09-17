@@ -2,9 +2,9 @@
 
 import express from "express"
 const router = express.Router()
-import {adminProductController} from "../../controllers/admin/productController"
+import { adminProductController } from "../../controllers/admin/productController"
 import { validation } from "../../utils/validation"
-import {productSchema} from "../../schema.ts/admin/productSchema"
+import { productSchema } from "../../schema.ts/admin/productSchema"
 
 
 
@@ -13,9 +13,9 @@ router.get("/", adminProductController.getAllProducts)
 
 router.get("/:proId", adminProductController.getProductsByID)
 
-router.post("/",validation(productSchema), adminProductController.addProduct)
+router.post("/", validation(productSchema), adminProductController.addProduct)
 
-router.put("/:proId",validation(productSchema), adminProductController.updateProduct)
+router.put("/:proId", validation(productSchema), adminProductController.updateProduct)
 
 router.delete("/:proId", adminProductController.deleteProduct)
 
@@ -28,6 +28,16 @@ router.get("/:proId/product-stocks", adminProductController.getAllStocksByProdec
 router.put("/:proId/product-stock/:reqId/verify", adminProductController.verifyProductStockById)
 
 router.put("/:proId/product-stock/:reqId/issuspend", adminProductController.isSuspendProductStock)
+
+router.get("/:proId/product-stock/:reqId", adminProductController.getProductStockById)
+
+router.post("/:proId/product-stock", adminProductController.addProductStockUserVendorId)
+
+router.put("/:proId/product-stock/:reqId", adminProductController.stockEditById)
+
+
+
+
 
 
 

@@ -58,9 +58,14 @@ const instantCourtSchema = new Schema<IInstantCountType>({
 
         type: Number,
         required: true
+    },
+    fileUrl:{
+        
+        type:String,
+        required:true
     }
 
-
+    
 
 },
     {

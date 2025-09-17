@@ -32,6 +32,11 @@ const blogSchema = new Schema<IBlogType>({
         type: Date,
         required: true
     },
+    status: {
+
+        type: Boolean,
+        default: true
+    }
 },
     {
         timestamps: true

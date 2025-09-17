@@ -145,6 +145,39 @@ export const blogService = {
                 reject(error.message)
             }
         })
+    },
+
+    updateBlogStatus: (blogId: any, status: boolean) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+                const result = await Blog.findByIdAndUpdate({ _id: blogId },
+                    {
+                        $set: {
+                            status: status
+                        }
+                    },
+                    {
+                        new: true
+                    }
+                )
+
+                if (!result) {
+
+                    throw new Error("Blog not found")
+                }
+                
+
+                resolve(result)
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+        })
+
     }
 
 

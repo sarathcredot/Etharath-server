@@ -1,5 +1,5 @@
 
-import { ProductType, GetallArrgu } from "../../types/product"
+import { ProductType, GetallArrgu, ProductStockVenderType, AccessRequesType } from "../../types/product"
 import { Product, ProductStockVender } from "../../models/product"
 import { VERIFY_STATUS } from "../../utils/constants"
 import { Brand } from "../../models/brand";
@@ -15,7 +15,7 @@ export const adminProductService = {
                 let query: any = {};
 
                 if (status) {
-                    query.isVerified = status;
+                    query.isVerified = JSON.parse(status);
                 }
 
                 if (search) {
@@ -45,7 +45,7 @@ export const adminProductService = {
                         {
                             $unwind: "$brand"
                         },
-                        
+
                         {
                             $sort: { createdAt: -1 }
                         },
@@ -96,12 +96,12 @@ export const adminProductService = {
 
                 ])
 
-                if (product.length===0) {
+                if (product.length === 0) {
 
                     throw new Error("product not found")
                 }
 
-                console.log("pro",product)
+                console.log("pro", product)
 
                 resolve(product[0])
 
@@ -267,6 +267,92 @@ export const adminProductService = {
         })
     },
 
+    addProductStockUseVendorId: (data: AccessRequesType) => {
+
+        return new Promise(async (resolve, reejct) => {
+
+            try {
+
+                const productDetails: any = await Product.findById({ _id: data.productId })
+
+                if (!productDetails || productDetails.isVerified === VERIFY_STATUS.PENDING || productDetails.isVerified === VERIFY_STATUS.REJECTED || productDetails.isSuspend === true) {
+
+                    throw new Error("you can't sent request this product ")
+                }
+
+                const final = new ProductStockVender({
+                    ...data,
+                    isVerified: VERIFY_STATUS.APPROVED
+
+                })
+
+                const result = await final.save()
+
+                resolve(result)
+
+
+
+            } catch (error: any) {
+
+                reejct(error.message)
+            }
+        })
+
+
+    },
+
+    getProductStockDetialsById: (proId: any, reqId: any) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+                const result = await ProductStockVender.findById({ _id: reqId })
+
+                if (!result) {
+
+                    throw new Error("no stock details found")
+                }
+
+                resolve(result)
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+        })
+
+
+    },
+
+    updateProductStocksById: (reqId: any, data: ProductStockVenderType) => {
+
+        return new Promise(async (resolve, reject) => {
+            try {
+
+                const result = await ProductStockVender.findByIdAndUpdate(
+                    { _id: reqId },
+                    {
+                        $set: { ...data }
+                    },
+                    { new: true }
+                );
+
+                if (!result) {
+                    throw new Error("Product stock not found");
+                }
+
+                resolve({
+                    message: "Product stock updated successfully",
+                    result
+                });
+
+            } catch (error: any) {
+                reject(error.message);
+            }
+        });
+
+    },
 
 
 
@@ -425,6 +511,8 @@ export const adminProductService = {
             }
         })
     },
+
+
 
 
 

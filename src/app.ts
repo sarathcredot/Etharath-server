@@ -13,6 +13,7 @@ import vendorRout from "./routers/vender"
 import retailerRoute from "./routers/retailer"
 import salesAgent from "./routers/salesAgent"
 import fileUploadRouter from "./routers/fileUploading"
+import commonRouetr from "./routers/common"
 
 
 // Load environment variables
@@ -54,6 +55,8 @@ app.use("/api/auth", authRout)
 app.use("/api/kyc", kycRout)
 app.use("/api/user", userRouter)
 app.use("/api/upload", fileUploadRouter)
+app.use("/api/common", commonRouetr)
+
 
 // admin routers
 app.use("/api/admin", adminRout)

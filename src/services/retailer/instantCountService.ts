@@ -37,7 +37,8 @@ export const instantCourtService = {
                     email: data.email,
                     place: data.place,
                     totalAmount: totalAmount,
-                    products: products
+                    products: products,
+                    fileUrl: data.fileUrl
                 })
 
                 const result = await final.save()
@@ -70,5 +71,6 @@ export const instantCourtService = {
         })
     }
 
+    
 
 }

@@ -16,7 +16,8 @@ export interface IUserType extends Document {
     salesAgentOwner?: ObjectId | null;
     location: string,
     eidNo: string,
-    eidFile: string
+    eidFile: string,
+    vendorTag: string
 
 }
 

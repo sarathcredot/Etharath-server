@@ -8,6 +8,24 @@ import { salesAgentOrderService } from "../../services/salesAgent/orderService"
 
 export const salesAgentOrderController = {
 
+    getAllOrdersByLocation: async (req: any, res: Response) => {
+
+        try {
+
+            const userId = req.user._id;
+
+            const orders = await salesAgentOrderService.getAllOrdersByLocation(userId)
+            handleResponse.handleSuccess(res, orders, "Orders fetched successfully", 200);
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error.message, 500);
+
+        }
+
+    },
+
     getAllMyAssignedOrders: async (req: any, res: Response) => {
 
         try {
@@ -31,6 +49,23 @@ export const salesAgentOrderController = {
 
     },
 
+    orderSelfAssigned: async (req: any, res: Response) => {
+
+        try {
+
+            const userId = req.user._id;
+            const { orderId } = req.params
+
+            const result = await salesAgentOrderService.orderSelfAssigned(userId, orderId)
+            handleResponse.handleSuccess(res, result, "Assigned Orders fetched successfully", 200);
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error.message, 500);
+        }
+    },
+
+
     getOrderById: async (req: Request, res: Response) => {
         try {
             const { orderId } = req.params;
@@ -52,6 +87,7 @@ export const salesAgentOrderController = {
             handleResponse.handleError(res, "", error.message, 500);
         }
     },
+
 
 
 

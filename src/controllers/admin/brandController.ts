@@ -89,7 +89,7 @@ export const brandControllerByAdmin = {
             const { id } = req.params
             const { isActive } = req.body
 
-            
+
 
             const result: any = await BrandServiceByAdmin.activeControllBrandDetails(id, isActive)
 
@@ -125,7 +125,23 @@ export const brandControllerByAdmin = {
 
     },
 
+    getAllProductsByBarandId: async (req: Request, res: Response) => {
 
+        try {
+
+            const { id } = req.params
+
+            const result = await BrandServiceByAdmin.getAllProductsByBarandId(id)
+
+            handleResponse.handleSuccess(res, result, "all product find successfully", 200)
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500)
+
+        }
+    }
 
 
 

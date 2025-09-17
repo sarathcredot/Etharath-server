@@ -12,6 +12,7 @@ export interface IBlogType extends Document {
     content: string,
     date: Date,
     imgUrl: string,
-    tags: string[]
+    tags: string[],
+    status: boolean
 
 }

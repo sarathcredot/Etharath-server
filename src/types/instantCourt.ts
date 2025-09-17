@@ -14,7 +14,8 @@ export interface IInstantCountType extends Document {
     email: string,
     place: string,
     products: [],
-    totalAmount: number
+    totalAmount: number,
+    fileUrl: string
 
 }
 

@@ -60,6 +60,9 @@ const UserSchema = new Schema<IUserType>({
     eidFile: {
         type: String,
         default: ""
+    },
+    vendorTag: {
+        type: String
     }
 
 }, { timestamps: true });
