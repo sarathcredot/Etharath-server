@@ -15,6 +15,7 @@ import attributesRouter from "./admin/attributes"
 import proCategoryRouter from "./admin/proCategory"
 import blogRouter from "./admin/cms/blog"
 import offersRouter from "./admin/cms/offers"
+import subscriptionPlanRouter from "./admin/subscription"
 
 
 
@@ -40,6 +41,8 @@ router.use("/attributes", attributesRouter)
 router.use("/procategory", proCategoryRouter)
 router.use("/cms/blog", blogRouter)
 router.use("/cms/", offersRouter)
+router.use("/subcription-plans", subscriptionPlanRouter)
+
 
 
 

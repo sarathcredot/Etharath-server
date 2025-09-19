@@ -73,7 +73,5 @@ app.use("/api/retailer", retailerRoute)
 
 
 
-
-
-
 export default app; 
+

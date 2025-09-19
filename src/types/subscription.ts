@@ -59,3 +59,19 @@ export interface UserSubscriptionType {
     userSearchCount?: Number;
     userSearchResetDate?: Date;
 }
+
+
+
+
+export interface ISubscriptionPlanType {
+
+    role: UserRole,
+    plan: PlanName,
+    price: number,
+    duration: DurationType,
+    features: string[],
+    isSuspend: Boolean
+
+
+
+}

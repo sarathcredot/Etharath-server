@@ -84,7 +84,6 @@ export const offersService = {
 
     },
 
-
     getOfferDetailsById: (offerId: any) => {
 
         return new Promise(async (resolve, reject) => {
@@ -109,8 +108,6 @@ export const offersService = {
 
         })
     },
-
-
 
     deleteOfferById: (offerId: any) => {
 
@@ -165,8 +162,6 @@ export const offersService = {
             }
         })
     }
-
-
 
 
 }

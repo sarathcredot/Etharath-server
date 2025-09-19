@@ -25,9 +25,6 @@ router.get("/blog", async (req: Request, res: Response) => {
     }
 })
 
-
-
-
 router.get("/offers", async (req: Request, res: Response) => {
 
     try {
@@ -44,6 +41,27 @@ router.get("/offers", async (req: Request, res: Response) => {
 
 })
 
+router.get("/subscription-plans", async (req: Request, res: Response) => {
+
+
+    try {
+
+        const role:any = req.query.role 
+
+        if (!role) {
+            throw new Error("Role is required");
+        }
+
+
+        const result = await commonService.getAllSubscriptionPlans(role)
+
+    } catch (error: any) {
+
+        handleResponse.handleError(res, "", error, 500);
+
+    }
+
+})
 
 
 

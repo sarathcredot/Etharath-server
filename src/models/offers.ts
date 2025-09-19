@@ -18,12 +18,12 @@ const offersSchema = new Schema<IOffers>({
     imageUrl: {
 
         type: String,
-        requireed: true
+        required: true
     },
     priority: {
 
         type: Number,
-        requireed: true
+        required: true
     },
     status: {
 
