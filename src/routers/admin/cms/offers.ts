@@ -10,7 +10,7 @@ router.post("/", offersController.createNewOffers)
 router.get("/:offerId", offersController.getOfferDetailsById)
 router.patch("/:offerId", offersController.updateOfferDetailsById)
 router.patch("/:offerId/update-status", offersController.updateOfferStatusById)
-router.delete("/:offerId", offersController.updateOfferDetailsById)
+router.delete("/:offerId", offersController.deleteOfferById)
 
 
 
