@@ -9,16 +9,8 @@ import { adminSalesAgentController } from "../../controllers/admin/salesAgentCon
 
 router.get("/",adminSalesAgentController.getAllSalesAgents)
 router.post("/",adminSalesAgentController.createSalesAgent)
+
 router.put("/agentId/update-status",adminSalesAgentController.isSuspendSalesAgent)
-
-
-
-
-
-
-
-
-
 
 
 

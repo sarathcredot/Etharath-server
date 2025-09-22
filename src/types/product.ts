@@ -23,7 +23,8 @@ export interface IProductType extends Document {
     yearOfManufacturer: number,
     width: number,
     height: number,
-    size: number
+    size: number,
+    description: string
 
 
 }

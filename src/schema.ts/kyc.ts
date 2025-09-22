@@ -4,71 +4,97 @@
 
 import { z } from "zod";
 
+
+// export const kycDetailsSchema = z.object({
+//   businessName: z.string().nonempty("Business name is required").trim().min(1, "Business name is required"),
+//   tradeLicenseNumber: z.string().nonempty("Trade license number is required").trim().min(1, "Trade license number is required"),
+//   licenseExpiryDate: z.coerce.date().refine(
+//     (date) => !!date,
+//     { message: "License expiry date is required" }
+//   ),
+//   emiratesId: z.string().nonempty("Emirates ID is required").trim().min(1, "Emirates ID is required"),
+//   contactPerson: z.string().nonempty("Contact person is required").trim().min(1, "Contact person is required"),
+//   contactNumber: z.string().nonempty("Contact number is required").trim().min(1, "Contact number is required"),
+//   email: z.string().nonempty("Email is required").trim().email("Invalid email address"),
+//   emirate: z.enum([
+//     "Dubai",
+//     "Abu Dhabi",
+//     "Sharjah",
+//     "Ajman",
+//     "Fujairah",
+//     "Ras Al Khaimah",
+//     "Umm Al Quwain"
+//   ]),
+//   vatNumber: z.string().optional(),
+//   documents: z.object({
+//     tradeLicense: z.string().nonempty("Trade license document is required").trim().min(1, "Trade license document is required"),
+//     emiratesIdCopy: z.string().nonempty("Emirates ID copy is required").trim().min(1, "Emirates ID copy is required"),
+//     vatCertificate: z.string().optional()
+//   }),
+//   address: z.object({
+//     streetAddress: z.string().nonempty("Street address is required").trim().min(1, "Street address is required"),
+//     area: z.string().nonempty("Area is required").trim().min(1, "Area is required"),
+//     city: z.string().nonempty("City is required").trim().min(1, "City is required"),
+//     poBox: z.string().optional()
+//   })
+// });
+
+// export const kycDetailsSchemaForAdmin = z.object({
+//   businessName: z.string().nonempty("Business name is required").trim().min(1, "Business name is required"),
+//   tradeLicenseNumber: z.string().nonempty("Trade license number is required").trim().min(1, "Trade license number is required"),
+//   licenseExpiryDate: z.coerce.date().refine(
+//     (date) => !!date,
+//     { message: "License expiry date is required" }
+//   ),
+//   emiratesId: z.string().nonempty("Emirates ID is required").trim().min(1, "Emirates ID is required"),
+//   contactPerson: z.string().nonempty("Contact person is required").trim().min(1, "Contact person is required"),
+//   contactNumber: z.string().nonempty("Contact number is required").trim().min(1, "Contact number is required"),
+//   email: z.string().nonempty("Email is required").trim().email("Invalid email address"),
+//   emirate: z.enum([
+//     "Dubai",
+//     "Abu Dhabi",
+//     "Sharjah",
+//     "Ajman",
+//     "Fujairah",
+//     "Ras Al Khaimah",
+//     "Umm Al Quwain"
+//   ]),
+//   vatNumber: z.string().optional(),
+//   documents: z.object({
+//     tradeLicense: z.string().nonempty("Trade license document is required").trim().min(1, "Trade license document is required"),
+//     emiratesIdCopy: z.string().nonempty("Emirates ID copy is required").trim().min(1, "Emirates ID copy is required"),
+//     vatCertificate: z.string().optional()
+//   }),
+//   address: z.object({
+//     streetAddress: z.string().nonempty("Street address is required").trim().min(1, "Street address is required"),
+//     area: z.string().nonempty("Area is required").trim().min(1, "Area is required"),
+//     city: z.string().nonempty("City is required").trim().min(1, "City is required"),
+//     poBox: z.string().optional()
+//   }),
+//   // kycStatus: z.enum(["pending", "approved", "rejected"])
+// });
+
+
+
+
 export const kycDetailsSchema = z.object({
-  businessName: z.string().nonempty("Business name is required").trim().min(1, "Business name is required"),
-  tradeLicenseNumber: z.string().nonempty("Trade license number is required").trim().min(1, "Trade license number is required"),
-  licenseExpiryDate: z.coerce.date().refine(
-    (date) => !!date,
-    { message: "License expiry date is required" }
-  ),
-  emiratesId: z.string().nonempty("Emirates ID is required").trim().min(1, "Emirates ID is required"),
-  contactPerson: z.string().nonempty("Contact person is required").trim().min(1, "Contact person is required"),
-  contactNumber: z.string().nonempty("Contact number is required").trim().min(1, "Contact number is required"),
-  email: z.string().nonempty("Email is required").trim().email("Invalid email address"),
-  emirate: z.enum([
-    "Dubai",
-    "Abu Dhabi",
-    "Sharjah",
-    "Ajman",
-    "Fujairah",
-    "Ras Al Khaimah",
-    "Umm Al Quwain"
-  ]),
-  vatNumber: z.string().optional(),
+  createdBy: z.string().min(1, "createdBy is required"), // ObjectId as string
+  shope_name: z.string().min(1, "Shop name is required"),
+  business_type: z.string().min(1, "Business type is required"),
+  shop_location: z.string().min(1, "Shop location is required"),
+  tradeLicenseNumber: z.string().min(1, "Trade license number is required"),
+
   documents: z.object({
-    tradeLicense: z.string().nonempty("Trade license document is required").trim().min(1, "Trade license document is required"),
-    emiratesIdCopy: z.string().nonempty("Emirates ID copy is required").trim().min(1, "Emirates ID copy is required"),
-    vatCertificate: z.string().optional()
+    tradeLicense: z.string().min(1, "Trade license document is required"),
   }),
-  address: z.object({
-    streetAddress: z.string().nonempty("Street address is required").trim().min(1, "Street address is required"),
-    area: z.string().nonempty("Area is required").trim().min(1, "Area is required"),
-    city: z.string().nonempty("City is required").trim().min(1, "City is required"),
-    poBox: z.string().optional()
-  })
+
+  shop_address: z.string().min(1, "Shop address is required"),
+  city: z.string().min(1, "City is required"),
+  post: z.string().min(1, "Post is required"),
+  business_hours: z.string().min(1, "Business hours is required"),
+  shop_contact_number: z.string().min(1, "Contact number is required"),
+  shop_photo_logo: z.string().min(1, "Shop logo is required"),
+
 });
 
-export const kycDetailsSchemaForAdmin = z.object({
-  businessName: z.string().nonempty("Business name is required").trim().min(1, "Business name is required"),
-  tradeLicenseNumber: z.string().nonempty("Trade license number is required").trim().min(1, "Trade license number is required"),
-  licenseExpiryDate: z.coerce.date().refine(
-    (date) => !!date,
-    { message: "License expiry date is required" }
-  ),
-  emiratesId: z.string().nonempty("Emirates ID is required").trim().min(1, "Emirates ID is required"),
-  contactPerson: z.string().nonempty("Contact person is required").trim().min(1, "Contact person is required"),
-  contactNumber: z.string().nonempty("Contact number is required").trim().min(1, "Contact number is required"),
-  email: z.string().nonempty("Email is required").trim().email("Invalid email address"),
-  emirate: z.enum([
-    "Dubai",
-    "Abu Dhabi",
-    "Sharjah",
-    "Ajman",
-    "Fujairah",
-    "Ras Al Khaimah",
-    "Umm Al Quwain"
-  ]),
-  vatNumber: z.string().optional(),
-  documents: z.object({
-    tradeLicense: z.string().nonempty("Trade license document is required").trim().min(1, "Trade license document is required"),
-    emiratesIdCopy: z.string().nonempty("Emirates ID copy is required").trim().min(1, "Emirates ID copy is required"),
-    vatCertificate: z.string().optional()
-  }),
-  address: z.object({
-    streetAddress: z.string().nonempty("Street address is required").trim().min(1, "Street address is required"),
-    area: z.string().nonempty("Area is required").trim().min(1, "Area is required"),
-    city: z.string().nonempty("City is required").trim().min(1, "City is required"),
-    poBox: z.string().optional()
-  }),
-  // kycStatus: z.enum(["pending", "approved", "rejected"])
-});
+// ✅ Type inference

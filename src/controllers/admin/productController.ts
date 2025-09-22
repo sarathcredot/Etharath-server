@@ -17,6 +17,7 @@ export const adminProductController = {
         try {
 
             const result = await adminProductService.addProduct(req?.user?._id, req.body)
+           
             handleResponse.handleSuccess(res, result, "product created successfully", 200);
 
 

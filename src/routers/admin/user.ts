@@ -24,6 +24,9 @@ router.get("/vendor/:id/all-orders", adminUserController.getVendorAllOrders)
 
 router.get("/retailer/:id/all-orders", adminUserController.getRetailerAllOrders)
 
+router.get("/sales-agent/:id/all-orders", adminUserController.getSalesAgentAssignedAllOrders)
+router.get("/sales-agent/:id/all-claims", adminUserController.getSalesAgentAssignedAllClaims)
+
 
 
 

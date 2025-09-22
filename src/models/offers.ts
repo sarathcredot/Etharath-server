@@ -7,7 +7,8 @@ export interface IOffers {
 
     imageUrl: string,
     priority: number,
-    status: boolean
+    status: boolean,
+    link?:string
 
 
 }
@@ -26,9 +27,11 @@ const offersSchema = new Schema<IOffers>({
         required: true
     },
     status: {
-
         type: Boolean,
         default: true
+    },
+    link: {
+        type: String,
     }
 })
 

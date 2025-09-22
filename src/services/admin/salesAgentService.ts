@@ -1,7 +1,10 @@
 
 import { User } from "../../models/user"
+import { Order } from "../../models/order"
+import { Claim } from "../../models/claim"
 import { USER_ROLES } from "../../utils/constants"
 import { UserReqType } from "../../types/userTypes"
+import { GetallArrgu } from "../../types/product"
 import mongoose from "mongoose"
 
 
@@ -121,6 +124,210 @@ export const adminSalesAgentService = {
             }
         })
     },
+
+
+    getAssignedOrders: (salesAgentId: any, data: GetallArrgu) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+                const query: any = { assignedToSalesAgent: salesAgentId }
+
+                if (data.status) {
+
+                    query.status = JSON.parse(data.status)
+                }
+
+
+                const skip = (data.page - 1) * data.limit;
+
+                if (data.search) {
+
+                    query.$or = [
+                        { orderId: { $regex: data.search, $options: 'i' } },
+
+                    ];
+                }
+
+
+
+                const [orders, total] = await Promise.all([
+
+                    Order.aggregate([
+
+                        {
+                            $match: query
+                        },
+
+                        {
+                            $lookup: {
+                                from: "users",
+                                localField: "userId",
+                                foreignField: "_id",
+                                as: "userDetails"
+
+                            }
+                        },
+                        {
+                            $unwind: "$userDetails"
+                        },
+
+                        {
+                            $lookup: {
+                                from: "productStocksVender",
+                                localField: "stockIdByVendor",
+                                foreignField: "_id",
+                                as: "stockDetails"
+
+                            }
+                        },
+
+                        {
+                            $unwind: "$stockDetails"
+                        },
+
+
+                        {
+                            $lookup: {
+                                from: "products",
+                                localField: "stockDetails.productId",
+                                foreignField: "_id",
+                                as: "productDetails"
+
+                            }
+                        },
+
+                        {
+                            $unwind: "$productDetails"
+                        },
+                        {
+                            $lookup: {
+                                from: "brands",
+                                localField: "productDetails.brand",
+                                foreignField: "_id",
+                                as: "brandDetails"
+
+                            }
+                        },
+                        {
+                            $unwind: "$brandDetails"
+                        },
+
+                        {
+                            $sort: { createdAt: -1 }
+                        },
+                        {
+                            $skip: skip
+                        },
+                        {
+                            $limit: data.limit
+                        }
+
+
+                    ]),
+                    Order.countDocuments(query)
+                ])
+
+                resolve({
+                    result: orders,
+                    total,
+                    currentPage: data.page,
+                    totalPages: Math.ceil(total / data.limit),
+                    message: "Order fetched successfully",
+                });
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+        })
+    },
+
+
+    getAssignedClaims: (salesAgentId: any, data: GetallArrgu) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+                const query: any = { assignedToSalesAgent: salesAgentId }
+
+                if (data.status) {
+
+                    query.status = JSON.parse(data.status)
+                }
+
+
+                const skip = (data.page - 1) * data.limit;
+
+                if (data.search) {
+
+                    query.$or = [
+                        { claimId: { $regex: data.search, $options: 'i' } },
+
+                    ];
+                }
+
+
+                const [claim, total] = await Promise.all([
+
+                    Claim.aggregate([
+
+                        {
+                            $match: query
+                        },
+                        {
+                            $lookup: {
+                                from: "users",
+                                localField: "userId",
+                                foreignField: "_id",
+                                as: "userDetails"
+
+                            }
+                        },
+                        {
+                            $unwind: "$userDetails"
+                        },
+
+                        {
+                            $lookup: {
+                                from: "orders",
+                                localField: "orderId",
+                                foreignField: "_id",
+                                as: "orderDetails"
+
+                            }
+                        },
+                        {
+                            $unwind: "$orderDetails"
+                        },
+
+                    ]),
+
+                    Claim.countDocuments(query)
+
+
+
+                ])
+
+
+                resolve({
+                    result: claim,
+                    total,
+                    currentPage: data.page,
+                    totalPages: Math.ceil(total / data.limit),
+                    message: "Order fetched successfully",
+                });
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+        })
+
+
+    }
 
 
 }

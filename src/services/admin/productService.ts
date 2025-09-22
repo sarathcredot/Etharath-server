@@ -503,7 +503,14 @@ export const adminProductService = {
                     throw new Error("product not found")
                 }
 
-                response(result)
+
+
+                response({
+
+                    result,
+                    message: isSuspend ? "Product has been activated" : "product has been deactivated."
+
+                })
 
             } catch (error: any) {
 

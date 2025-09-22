@@ -13,6 +13,9 @@ router.get("/", vendorProductController.getAllProducts)
 
 router.get("/myproducts", vendorProductController.getAllMyProduct)
 
+router.post("/:proId/product-stock-add-req", verifyAccountKyc, vendorProductController.productAccessRequestByVender)
+
+
 router.get("/myproducts/:reqId", vendorProductController.getMyProductStockById)
 
 router.post("/:reqId", verifyAccountKyc, vendorProductController.isSuspendProductStock)
@@ -23,7 +26,6 @@ router.delete("/:reqId", verifyAccountKyc, vendorProductController.deleteProduct
 
 router.get("/:proId", vendorProductController.getProductsByID)
 
-router.post("/:proId/product-stock-add-req", verifyAccountKyc, vendorProductController.productAccessRequestByVender)
 
 
 

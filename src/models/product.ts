@@ -57,6 +57,10 @@ const productSchema = new Schema<IProductType>({
         required: true
 
     },
+    description: {
+
+        type: String
+    },
     isVerified: {
         type: String,
         default: VERIFY_STATUS.PENDING
@@ -99,8 +103,13 @@ const ProductStocksSchema = new Schema({
     location: {
 
         type: String,
-        required: true
+
     },
+
+    type: {
+        type: String,
+    },
+
     price: {
 
         type: Number,
@@ -114,6 +123,12 @@ const ProductStocksSchema = new Schema({
 
 
     },
+
+    description: {
+
+        type: String
+    },
+
     isVerified: {
         type: String,
         default: VERIFY_STATUS.PENDING

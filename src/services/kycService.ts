@@ -5,13 +5,13 @@ import { Kyc } from "../models/kyc"
 export const kycService = {
 
 
-    getKyc: async (createdBy:any) => {
+    getKyc: async (createdBy: any) => {
 
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
 
             try {
 
-                const checkExistKyc = await Kyc.findOne({ createdBy:createdBy })
+                const checkExistKyc = await Kyc.findOne({ createdBy: createdBy })
 
                 if (!checkExistKyc) {
 
@@ -46,7 +46,7 @@ export const kycService = {
                 const final = new Kyc({
                     createdBy: data.createdBy,
                     ...data.kycDetails,
-                    kycStatus:"pending"
+                    kycStatus: "pending"
                 })
 
                 const result = await final.save()
