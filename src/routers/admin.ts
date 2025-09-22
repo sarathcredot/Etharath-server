@@ -40,7 +40,7 @@ router.use("/claim", claimRouter)
 router.use("/attributes", attributesRouter)
 router.use("/procategory", proCategoryRouter)
 router.use("/cms/blog", blogRouter)
-router.use("/cms/", offersRouter)
+router.use("/cms/offer", offersRouter)
 router.use("/subcription-plans", subscriptionPlanRouter)
 
 
