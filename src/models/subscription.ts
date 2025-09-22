@@ -95,7 +95,7 @@ const subscriptionSchema = new Schema({
 
     plan: {
         type: String,
-        enum: ['standered', 'executive', 'corporate'],
+        enum: ['standard', 'executive', 'corporate'],
         required: true
     },
     role: {
