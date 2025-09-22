@@ -44,6 +44,8 @@ export interface PaymentDetails {
 }
 
 export interface UserSubscriptionType {
+
+    subId: string
     // optional MongoDB ID
     userId: ObjectId; // reference to User _id
     // role: UserRole;
@@ -51,6 +53,7 @@ export interface UserSubscriptionType {
     startDate: Date;
     endDate: Date;
     isActive?: boolean; // default: true
+    purchase_Data: Date
     additionalUsers?: number; // for vendor corporate
     additionalBrands?: number; // for vendor corporate
     paymentStatus?: PaymentStatus; // default: pending

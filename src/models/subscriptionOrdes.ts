@@ -23,7 +23,14 @@ const subOrdersSchema = new Schema({
         ref: "SubscriptionPlan",
         required: true
     },
-    price: {
+    plan_price: {
+
+        type: Number,
+        required: true
+
+    },
+
+    total_amount: {
 
         type: Number,
         required: true
@@ -39,7 +46,7 @@ const subOrdersSchema = new Schema({
     plan_start_date: {
 
         type: Date,
-        default: Date.now()
+        default: Date
     },
 
     plan_end_date: {
@@ -48,10 +55,26 @@ const subOrdersSchema = new Schema({
         required: true
     },
 
+    plan_duration: {
+
+        type: Number,
+        required: true
+    },
+
     isActive: {
 
         type: Boolean,
         required: true
+    },
+    paymentStatus: {
+        type: String,
+        enum: ['pending', 'paid', 'failed'],
+        default: 'pending'
+    },
+    paymentDetails: {
+        method: String,
+        transactionId: String,
+        paidOn: Date
     }
 
 },
@@ -59,3 +82,5 @@ const subOrdersSchema = new Schema({
         timestamps: true
     }
 )
+
+export const SubOrder = model('SubscriptionOrder', subOrdersSchema);

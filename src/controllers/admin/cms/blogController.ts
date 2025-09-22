@@ -8,6 +8,118 @@ import { blogService } from "../../../services/admin/cms/blogService"
 
 export const blogController = {
 
+    createBlogTag: async (req: Request, res: Response) => {
+
+
+        try {
+
+            const { tag } = req.body
+
+            const result = await blogService.createBlogTag(tag)
+            handleResponse.handleSuccess(res, result, "Blog tag created successfully", 200);
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500);
+
+
+        }
+    },
+
+    getAllBlogTages: async (req: Request, res: Response) => {
+
+        try {
+
+            const result = await blogService.getAllBlogTages()
+            handleResponse.handleSuccess(res, result, "Blog tag find successfully", 200);
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500);
+
+        }
+
+    },
+
+    deleteBlogTag: async (req: Request, res: Response) => {
+
+
+        try {
+
+            const { tag } = req.body
+
+            const result = await blogService.deleteBlogTag(tag)
+            handleResponse.handleSuccess(res, result, "Blog tag deleted successfully", 200);
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500);
+
+        }
+    },
+
+
+
+    createBlogCategory: async (req: Request, res: Response) => {
+
+        try {
+
+            const { category } = req.body
+
+            const result = await blogService.createBlogCategory(category)
+            handleResponse.handleSuccess(res, result, "Blog category created successfully", 200);
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500);
+
+        }
+
+    },
+
+
+    getAllBlogCategory: async (req: Request, res: Response) => {
+
+        try {
+
+            const result = await blogService.getAllBlogCategory()
+            handleResponse.handleSuccess(res, result, "Blog category find successfully", 200);
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500);
+
+        }
+
+    },
+
+
+    deleteBlogCategory: async (req: Request, res: Response) => {
+
+
+        try {
+
+            const { category } = req.body
+
+            const result = await blogService.deleteBlogCategory(category)
+            handleResponse.handleSuccess(res, result, "Blog category deleted successfully", 200);
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500);
+
+        }
+    },
+
+
+
+
+
+
     addBlog: async (req: Request, res: Response) => {
 
         try {

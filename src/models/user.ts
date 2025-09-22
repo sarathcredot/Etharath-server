@@ -63,6 +63,11 @@ const UserSchema = new Schema<IUserType>({
     },
     vendorTag: {
         type: String
+    },
+    active_plan: {
+        type: Schema.Types.ObjectId,
+        ref: 'SubscriptionOrder',
+        default: null
     }
 
 }, { timestamps: true });

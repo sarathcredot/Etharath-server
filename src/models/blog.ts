@@ -28,6 +28,12 @@ const blogSchema = new Schema<IBlogType>({
             required: true
         }
     ],
+    category: {
+
+        type: String,
+        required: true
+    },
+
     date: {
         type: Date,
         required: true
@@ -44,4 +50,32 @@ const blogSchema = new Schema<IBlogType>({
 )
 
 
+
+
+const blogTagSchema = new Schema({
+
+    tages: [
+        {
+            type: String
+        }
+    ]
+})
+
+
+const blogcategorySchema = new Schema({
+
+    categorys: [
+        {
+            type: String
+        }
+    ]
+})
+
+
+
+export const BlogTag = model<IBlogType>("BlogTag", blogTagSchema);
+
+export const BlogCategory = model("BlogCategory", blogcategorySchema);
+
 export const Blog = model<IBlogType>("Blog", blogSchema);
+

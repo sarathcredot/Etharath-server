@@ -1,6 +1,6 @@
 
 import { ObjectId } from "mongoose"
-import { Blog } from "../../../models/blog"
+import { Blog, BlogTag, BlogCategory } from "../../../models/blog"
 import { IBlogType } from "../../../types/blog"
 import { GetallArrgu } from "../../../types/product"
 
@@ -8,6 +8,154 @@ import { GetallArrgu } from "../../../types/product"
 
 
 export const blogService = {
+
+
+
+    createBlogTag: (tag: string) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+
+                const result = await BlogTag.updateOne({},
+                    {
+                        $push: { tags: tag }
+                    },
+                    { upsert: true }
+                )
+
+                resolve(result)
+
+            } catch (error: any) {
+
+                reject(error.message)
+
+            }
+        })
+
+    },
+
+
+    getAllBlogTages: () => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+
+                const result = await BlogTag.find()
+
+                resolve(result)
+
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+        })
+    },
+
+
+    deleteBlogTag: (tag: string) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+
+                const result = await BlogTag.updateOne({},
+                    {
+                        $pull: { tags: tag }
+                    },
+                    {
+                        upsert: true
+                    }
+                )
+
+                resolve(result)
+
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+        })
+    },
+
+
+
+    createBlogCategory: (category: string) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+
+                const result = await BlogCategory.updateOne({},
+                    {
+                        $push: { categorys: category }
+                    },
+                    { upsert: true }
+                )
+
+                resolve(result)
+
+            } catch (error: any) {
+
+                reject(error.message)
+
+            }
+        })
+
+
+    },
+
+    getAllBlogCategory: () => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+
+                const result = await BlogCategory.find()
+
+                resolve(result)
+
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+        })
+    },
+
+
+    deleteBlogCategory: (category: string) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+
+                const result = await BlogCategory.updateOne({},
+                    {
+                        $pull: { categorys: category }
+                    },
+                    {
+                        upsert: true
+                    }
+                )
+
+                resolve(result)
+
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+        })
+    },
 
 
     addBlog: (data: IBlogType) => {
@@ -23,7 +171,9 @@ export const blogService = {
                     content: data.content,
                     imgUrl: data.imgUrl,
                     date: data.date,
-                    tags: data.tags
+                    tags: data.tags,
+                    category: data.category
+
                 })
 
                 const result = await final.save()
@@ -168,7 +318,7 @@ export const blogService = {
 
                     throw new Error("Blog not found")
                 }
-                
+
 
                 resolve(result)
 

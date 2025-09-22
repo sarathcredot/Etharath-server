@@ -8,6 +8,12 @@ import { UserSubscriptionType } from "../types/subscription"
 
 
 const UserSubscriptionSchema = new Schema<UserSubscriptionType>({
+
+    subId: {
+
+        type: String,
+        required: true
+    },
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -27,24 +33,13 @@ const UserSubscriptionSchema = new Schema<UserSubscriptionType>({
         type: Date,
         required: true
     },
+    purchase_Data: {
+        type: Date,
+        default: Date.now
+    },
     isActive: {
         type: Boolean,
         default: true
-    },
-    additionalUsers: {
-        type: Number,
-        default: 0
-    },
-    additionalBrands: {
-        type: Number,
-        default: 0
-    },
-    userSearchCount: {
-
-        type: Number
-    },
-    userSearchResetDate: {
-        type: Date
     },
 
     paymentStatus: {
@@ -58,3 +53,5 @@ const UserSubscriptionSchema = new Schema<UserSubscriptionType>({
         paidOn: Date
     }
 });
+
+

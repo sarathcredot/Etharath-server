@@ -17,7 +17,8 @@ export interface IUserType extends Document {
     location: string,
     eidNo: string,
     eidFile: string,
-    vendorTag: string
+    vendorTag: string,
+    active_plan: ObjectId | null
 
 }
 
