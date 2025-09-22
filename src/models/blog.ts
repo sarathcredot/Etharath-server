@@ -54,7 +54,7 @@ const blogSchema = new Schema<IBlogType>({
 
 const blogTagSchema = new Schema({
 
-    tages: [
+    tags: [
         {
             type: String
         }
@@ -64,7 +64,7 @@ const blogTagSchema = new Schema({
 
 const blogcategorySchema = new Schema({
 
-    categorys: [
+    categories: [
         {
             type: String
         }

@@ -94,7 +94,7 @@ export const blogService = {
 
                 const result = await BlogCategory.updateOne({},
                     {
-                        $push: { categorys: category }
+                        $push: { categories: category }
                     },
                     { upsert: true }
                 )
@@ -140,7 +140,7 @@ export const blogService = {
 
                 const result = await BlogCategory.updateOne({},
                     {
-                        $pull: { categorys: category }
+                        $pull: { categories: category }
                     },
                     {
                         upsert: true
