@@ -130,7 +130,108 @@ export const adminSubscriptionController = {
             handleResponse.handleError(res, 500, error);
 
         }
+    },
+
+
+    getPlanUnderAllActiveOrders: async (req: Request, res: Response) => {
+
+        try {
+
+            const { planId } = req.params
+
+            const {
+                search,
+                limit = 10,
+                page = 1 } = req.query
+
+            const result = await adminSubscriptionService.getPlanUnderAllActiveOrders(planId, {
+
+                limit: Number(limit),
+                page: Number(page),
+                search: search,
+
+            })
+
+            handleResponse.handleSuccess(res, result, "Subscription plan orders find successfully", 200);
+
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, 500, error);
+        }
+
+    },
+
+
+    getSubScriptionOrderDetailsById: async (req: Request, res: Response) => {
+
+        try {
+
+            const { orderId } = req.params
+
+            const result = await adminSubscriptionService.getSubScriptionOrderDetailsById(orderId)
+
+            handleResponse.handleSuccess(res, result, "Subscription plan order find successfully", 200);
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, 500, error);
+
+        }
+    },
+
+
+    updateSubscriptionOrderExpiryDate: async (req: Request, res: Response) => {
+
+        try {
+
+            const { orderId } = req.params
+            const { date } = req.body
+
+            const result = await adminSubscriptionService.updateSubscriptionOrderExpiryDate(orderId, date)
+
+            handleResponse.handleSuccess(res, result, "Subscription plan order expiry Ddate updated successfully", 200);
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, 500, error);
+
+        }
+    },
+
+    getAllSubscriptionPurchaseTransactions: async (req: Request, res: Response) => {
+
+        try {
+
+            const {
+                search,
+                filter,
+                limit = 10,
+                page = 1
+            } = req.query
+
+
+
+            const result = await adminSubscriptionService.getAllSubscriptionPurchaseTransactions({
+
+                search,
+                filter: typeof filter === "string" ? filter : undefined,
+                limit: Number(limit),
+                page: Number(page)
+            })
+
+            handleResponse.handleSuccess(res, result, "Subscription plan transactions find successfully", 200);
+
+
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, 500, error);
+
+        }
     }
+
 
 
 

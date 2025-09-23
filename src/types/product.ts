@@ -55,7 +55,8 @@ export type GetallArrgu = {
     isSuspend?: any,
     page: number,
     limit: number,
-    role?: string
+    role?: string,
+    filter?: string
 }
 
 export type AccessRequesType = {

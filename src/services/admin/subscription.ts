@@ -3,6 +3,7 @@ import { SubscriptionPlanType, ISubscriptionPlanType } from "../../types/subscri
 import { SubscriptionPlan } from "../../models/subscription"
 import { GetallArrgu } from "../../types/product"
 import { SubOrder } from "../../models/subscriptionOrdes"
+import { any } from "zod"
 
 
 
@@ -198,27 +199,223 @@ export const adminSubscriptionService = {
     },
 
 
-    getPlanUnderAllActiveOrders: (planId: any) => {
+
+
+
+    getPlanUnderAllActiveOrders: (planId: any, data: GetallArrgu) => {
 
         return new Promise(async (resolve, reject) => {
 
             try {
 
 
-                const result = await SubOrder.find({ planId: planId, isActive: true })
+                const query: any = { planId: planId, isActive: true }
+
+                if (data.search) {
+
+                    query.$or = [
+                        { subId: { $regex: data.search, $options: 'i' } },
+                    ];
+                }
+
+                const skip = (data.page - 1) * data.limit;
+
+
+                const [subOrders, total] = await Promise.all([
+
+                    SubOrder.aggregate([
+
+                        { $match: query },
+                        {
+                            $lookup: {
+                                from: "users",
+                                foreignField: "_id",
+                                localField: "userId",
+                                as: "userDetails"
+                            }
+                        },
+
+                        {
+                            $unwind: "$userDetails"
+                        },
+                        {
+                            $sort: { createdAt: -1 }
+                        },
+                        {
+                            $skip: skip
+                        },
+                        {
+                            $limit: data.limit
+                        }
+
+                    ]),
+
+                    SubOrder.countDocuments(query)
+                ])
+
+                resolve({
+                    result: subOrders,
+                    total,
+                    currentPage: data.page,
+                    totalPages: Math.ceil(total / data.limit),
+                    message: "Subscription active orders find successfully",
+                });
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+
+        })
+
+    },
+
+
+    getSubScriptionOrderDetailsById: (orderId: any) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+                const result = await SubOrder.findById(orderId).populate("userId")
+
+                if (!result) {
+
+                    throw new Error("This subscription order not found")
+                }
+
+                resolve(result)
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+        })
+
+
+    },
+
+
+    updateSubscriptionOrderExpiryDate: (orderId: any, date: string) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+                const result = await SubOrder.findByIdAndUpdate({ _id: orderId },
+                    {
+                        $set: { plan_end_date: date }
+                    },
+                    {
+                        new: true
+                    }
+                )
+
+                if (!result) {
+
+                    throw new Error("This subscription order not found ")
+                }
 
                 resolve(result)
 
 
             } catch (error: any) {
 
-                resolve(error.message)
-            }
+                reject(error.message)
 
+            }
         })
 
+    },
+
+
+    getAllSubscriptionPurchaseTransactions: (data: GetallArrgu) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+
+                const query: any = {}
+
+                if (data.search) {
+
+                    query.$or = [
+                        { subId: { $regex: data.search, $options: 'i' } },
+                    ];
+                }
+
+
+                const skip = (data.page - 1) * data.limit;
+
+                const pipeline: any[] = [
+
+                    { $match: query },
+                    {
+
+                        $lookup: {
+                            from: "users",
+                            foreignField: "_id",
+                            localField: "userId",
+                            as: "userDetails"
+                        }
+
+                    },
+
+                    {
+                        $unwind: "$userDetails"
+                    },
+                    {
+                        $sort: { createdAt: -1 }
+                    },
+                    {
+                        $skip: skip
+                    },
+                    {
+                        $limit: data.limit
+                    }
+
+
+                ]
+
+                if (data.filter) {
+                    pipeline.push({
+                        $match: { "userDetails.role": data.filter },
+                    });
+                }
+
+                // for count doument
+                const countPipeline = [...pipeline, { $count: "total" }];
+
+
+                const [allOrders, total]: any[] = await Promise.all([
+
+                    SubOrder.aggregate(pipeline),
+
+                    SubOrder.aggregate(countPipeline),
+
+
+                ])
+
+
+                resolve({
+                    result: allOrders,
+                    total,
+                    currentPage: data.page,
+                    totalPages: Math.ceil(total / data.limit),
+                    message: "Subscription all orders find successfully",
+                });
+
+
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+        })
     }
 
-    
+
+
 
 }
