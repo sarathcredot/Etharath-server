@@ -64,7 +64,7 @@ const blogTagSchema = new Schema({
 
 const blogcategorySchema = new Schema({
 
-    categorys: [
+    categories: [
         {
             type: String
         }
