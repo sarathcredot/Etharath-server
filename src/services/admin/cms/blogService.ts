@@ -20,7 +20,7 @@ export const blogService = {
 
                 const result = await BlogTag.updateOne({},
                     {
-                        $push: { tags: tag }
+                        $push:{ tags: tag }
                     },
                     { upsert: true }
                 )

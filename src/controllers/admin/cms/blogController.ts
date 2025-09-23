@@ -27,7 +27,7 @@ export const blogController = {
         }
     },
 
-    getAllBlogTages: async (req: Request, res: Response) => {
+    getAllBlogTags: async (req: Request, res: Response) => {
 
         try {
 

@@ -2,6 +2,7 @@
 import { SubscriptionPlanType, ISubscriptionPlanType } from "../../types/subscription"
 import { SubscriptionPlan } from "../../models/subscription"
 import { GetallArrgu } from "../../types/product"
+import { SubOrder } from "../../models/subscriptionOrdes"
 
 
 
@@ -194,9 +195,30 @@ export const adminSubscriptionService = {
             }
 
         })
+    },
+
+
+    getPlanUnderAllActiveOrders: (planId: any) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+
+                const result = await SubOrder.find({ planId: planId, isActive: true })
+
+                resolve(result)
+
+
+            } catch (error: any) {
+
+                resolve(error.message)
+            }
+
+        })
+
     }
 
-
-
+    
 
 }

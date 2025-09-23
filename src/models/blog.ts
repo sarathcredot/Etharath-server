@@ -54,7 +54,7 @@ const blogSchema = new Schema<IBlogType>({
 
 const blogTagSchema = new Schema({
 
-    tages: [
+    tags: [
         {
             type: String
         }
@@ -73,7 +73,7 @@ const blogcategorySchema = new Schema({
 
 
 
-export const BlogTag = model<IBlogType>("BlogTag", blogTagSchema);
+export const BlogTag = model("BlogTag", blogTagSchema);
 
 export const BlogCategory = model("BlogCategory", blogcategorySchema);
 
