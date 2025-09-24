@@ -74,7 +74,8 @@ export const vendorProductController = {
                 location: req.body.location,
                 price: req.body.price,
                 requestedBy: req?.user?._id,
-                stock: req.body.stock
+                stock: req.body.stock,
+                warrantyPeriod: req.body.warrantyPeriod
             }
 
             const result = await vendorProductService.productAccessRequestByVender(data)

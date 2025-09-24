@@ -138,7 +138,7 @@ const ProductStocksSchema = new Schema({
         type: Boolean,
         default: false
 
-    }
+    } 
 },
 
     {

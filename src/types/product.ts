@@ -66,6 +66,7 @@ export type AccessRequesType = {
     stock: number,
     location: string,
     price: number
+    warrantyPeriod: number,
 
 }
 
