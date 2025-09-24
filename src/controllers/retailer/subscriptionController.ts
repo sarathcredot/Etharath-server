@@ -2,7 +2,7 @@
 
 import { handleResponse } from "../../utils/responseHandler"
 import { Request, Response } from 'express';
-import { subscriptionService } from "../../services/vender/subscriptionService"
+import { subscriptionService } from "../../services/retailer/subscriptionService"
 
 
 

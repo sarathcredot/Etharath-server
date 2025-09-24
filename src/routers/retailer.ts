@@ -10,6 +10,8 @@ import retailerOrderRouter from "./retailer/order"
 import retailerCliamRouter from "./retailer/claim"
 import retailerCartRouter from "./retailer/cart"
 import retailerInstantCourtRouter from "./retailer/instantCourt"
+import retailerSubscriptionRouter from "./vender/subscription"
+
 import { verifyAccountIsSuspended } from "../middlewares/checkAccountActive";
 
 
@@ -33,6 +35,8 @@ router.use("/order", retailerOrderRouter)
 router.use("/claim", retailerCliamRouter)
 router.use("/cart", retailerCartRouter)
 router.use("/instant-court", retailerInstantCourtRouter)
+router.use("/subscription", retailerSubscriptionRouter)
+
 
 
 
