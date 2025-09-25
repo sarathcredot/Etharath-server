@@ -161,6 +161,19 @@ export const adminProductService = {
                             $unwind: "$requestedBy"
                         },
                         {
+                            $lookup: {
+                                from: "products",
+                                localField: "productId",
+                                foreignField: "_id",
+                                as: "product"
+
+                            }
+
+                        },
+                        {
+                            $unwind: "$product"
+                        },
+                        {
                             $sort: { createdAt: -1 }
                         },
                         {
