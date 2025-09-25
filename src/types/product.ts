@@ -67,6 +67,7 @@ export type AccessRequesType = {
     location: string,
     price: number
     warrantyPeriod: number,
+    type: string
 
 }
 

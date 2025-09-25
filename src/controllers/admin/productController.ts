@@ -235,7 +235,8 @@ export const adminProductController = {
                 price: req.body.price,
                 requestedBy: req.body.requestedBy,
                 stock: req.body.stock,
-                warrantyPeriod: req.body.warrantyPeriod
+                warrantyPeriod: req.body.warrantyPeriod,
+                type: req.body.type
             }
 
             const result = await adminProductService.addProductStockUseVendorId(data)
