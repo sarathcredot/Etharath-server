@@ -258,7 +258,6 @@ export const adminProductController = {
 
     getProductStockById: async (req: any, res: Response) => {
 
-
         try {
 
             const { reqId } = req.params

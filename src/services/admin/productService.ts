@@ -320,15 +320,41 @@ export const adminProductService = {
 
             try {
 
-                const result = await ProductStockVender.findById({ _id: reqId })
+                // const result = await ProductStockVender.findById({ _id: reqId })
+                const result = await ProductStockVender.aggregate([
+                    {
+                        $match: { _id: new mongoose.Types.ObjectId(reqId) }
+                    },
+                    {
+                        $lookup: {
+                            from: "users",
+                            localField: "requestedBy",
+                            foreignField: "_id",
+                            as: "requestedBy"
+                        }
+                    },
+                    {
+                        $unwind: "$requestedBy"
+                    },
+                    {
+                        $lookup: {
+                            from: "products",
+                            localField: "productId",
+                            foreignField: "_id",
+                            as: "product"
+                        }
+                    },
+                    {
+                        $unwind: "$product"
+                    },
+                ])
 
                 if (!result) {
 
                     throw new Error("no stock details found")
                 }
 
-                resolve(result)
-
+                 resolve(result[0]);
             } catch (error: any) {
 
                 reject(error.message)
