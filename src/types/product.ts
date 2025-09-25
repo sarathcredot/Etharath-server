@@ -65,7 +65,8 @@ export type AccessRequesType = {
     requestedBy: ObjectId,
     stock: number,
     location: string,
-    price: number
+    price: number,
+    
 
 }
 

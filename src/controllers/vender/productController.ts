@@ -74,7 +74,8 @@ export const vendorProductController = {
                 location: req.body.location,
                 price: req.body.price,
                 requestedBy: req?.user?._id,
-                stock: req.body.stock
+                stock: req.body.stock,
+               
             }
 
             const result = await vendorProductService.productAccessRequestByVender(data)
@@ -163,6 +164,8 @@ export const vendorProductController = {
         }
 
     },
+
+
     stockEditById: async (req: any, res: Response) => {
 
         try {

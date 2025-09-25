@@ -17,7 +17,7 @@ export const adminProductController = {
         try {
 
             const result = await adminProductService.addProduct(req?.user?._id, req.body)
-           
+
             handleResponse.handleSuccess(res, result, "product created successfully", 200);
 
 
@@ -234,7 +234,8 @@ export const adminProductController = {
                 location: req.body.location,
                 price: req.body.price,
                 requestedBy: req.body.requestedBy,
-                stock: req.body.stock
+                stock: req.body.stock,
+                
             }
 
             const result = await adminProductService.addProductStockUseVendorId(data)
