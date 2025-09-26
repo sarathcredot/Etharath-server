@@ -18,6 +18,7 @@ import offersRouter from "./admin/cms/offers"
 import subscriptionPlanRouter from "./admin/subscription"
 import subscriptionPlanOrderRouter from "./admin/subscriptionOrders"
 import customerSupportRouter from "./admin/support"
+import dashboaedRouter from "./admin/dashboard"
 
 
 
@@ -46,6 +47,7 @@ router.use("/cms/offers", offersRouter)
 router.use("/subcription-plans", subscriptionPlanRouter)
 router.use("/subcription-orders", subscriptionPlanOrderRouter)
 router.use("/support", customerSupportRouter)
+router.use("/dashboard", dashboaedRouter)
 
 
 
