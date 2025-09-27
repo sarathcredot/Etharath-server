@@ -354,7 +354,7 @@ export const adminProductService = {
                     throw new Error("no stock details found")
                 }
 
-                 resolve(result[0]);
+                resolve(result[0]);
             } catch (error: any) {
 
                 reject(error.message)
@@ -390,6 +390,32 @@ export const adminProductService = {
                 reject(error.message);
             }
         });
+
+    },
+
+    deleteProductStockByID: (reqId: any) => {
+
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+                const result = await ProductStockVender.findByIdAndDelete({ _id: reqId })
+
+                if (!result) {
+
+                    throw new Error("This stock not found ")
+                }
+
+                resolve(result)
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+
+        })
+
 
     },
 

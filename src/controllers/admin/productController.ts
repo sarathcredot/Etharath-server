@@ -304,7 +304,21 @@ export const adminProductController = {
     },
 
 
+    // delete product stock
 
 
+    deleteProductStockByID: async (req: Request, res: Response) => {
+
+        try {
+
+            const { reqId } = req.params
+            const result = await adminProductService.deleteProductStockByID(reqId)
+
+        } catch (error: any) {
+
+            handleResponse.handleError(res, "", error, 500)
+
+        }
+    }
 
 }

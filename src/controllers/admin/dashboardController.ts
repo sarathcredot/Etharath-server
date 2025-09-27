@@ -28,7 +28,7 @@ export const adminDashboardController = {
 
         try {
 
-            const { filter = "month", role = "vendor", order = false } = req.query
+            const { filter = "month", role="vendor", order = false } = req.query
 
             const result = await adminDashboardServices.getTotalCountBasedTimeLine({
 

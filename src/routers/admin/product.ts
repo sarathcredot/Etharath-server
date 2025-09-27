@@ -35,6 +35,8 @@ router.post("/:proId/product-stock", adminProductController.addProductStockUserV
 
 router.put("/:proId/product-stock/:reqId", adminProductController.stockEditById)
 
+router.delete("/:proId/product-stock/:reqId", adminProductController.deleteProductStockByID)
+
 
 
 
