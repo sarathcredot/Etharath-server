@@ -289,7 +289,9 @@ export const adminProductController = {
             const data = {
                 stock: req.body.stock,
                 location: req.body.location,
-                price: req.body.price
+                price: req.body.price,
+                warrantyPeriod: req.body.warrantyPeriod
+                
             }
 
             const result = await adminProductService.updateProductStocksById(reqId, data)
