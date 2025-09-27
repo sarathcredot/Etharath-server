@@ -52,6 +52,10 @@ const UserSubscriptionSchema = new Schema<UserSubscriptionType>({
         transactionId: String,
         paidOn: Date
     }
-});
+},
+    {
+        timestamps: true
+    }
+);
 
 

@@ -4,17 +4,36 @@
 import multer from "multer";
 import express from "express";
 import path from "path";
+import fs from "fs";
 import { handleResponse } from "../utils/responseHandler"
 
 const router = express.Router();
 
 // Configure multer storage with original file name
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, "media/"); // save files in media folder
+//     },
+//     filename: (req, file, cb) => {
+//         const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+//         cb(null, uniqueSuffix + path.extname(file.originalname));
+//     },
+// });
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "media/"); // save files in media folder
+        const uploadPath = path.join(__dirname, "media"); // folder path
+
+        // Check if folder exists, if not create it
+        if (!fs.existsSync(uploadPath)) {
+            fs.mkdirSync(uploadPath, { recursive: true });
+        }
+
+        cb(null, uploadPath);
     },
     filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        const uniqueSuffix =
+            Date.now() + "-" + Math.round(Math.random() * 1e9);
         cb(null, uniqueSuffix + path.extname(file.originalname));
     },
 });
