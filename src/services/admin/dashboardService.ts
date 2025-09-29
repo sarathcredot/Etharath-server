@@ -3,6 +3,7 @@ import { User } from "../../models/user"
 import { Order } from "../../models/order"
 import { USER_ROLES } from "../../utils/constants"
 import { Product, ProductStockVender } from "../../models/product"
+import { SubOrder } from "../../models/subscriptionOrdes"
 
 
 
@@ -43,12 +44,15 @@ export const adminDashboardServices = {
 
                     totalRetailers,
                     thisMonthRetailers,
+                    lastMonthRetailer,
 
                     totalSalesExecutives,
                     thisMonthSalesExecutives,
+                    lastMonthSalesExecutives,
 
                     totalOrders,
-                    thisMonthOrder
+                    thisMonthOrder,
+                    lastMOnthOrder
 
                 ] = await Promise.all([
 
@@ -136,25 +140,30 @@ export const adminDashboardServices = {
                     vendor: {
 
                         total: totalVendors ?? 0,
-                        thisMonth: thisMonthVendor ?? 0
+                        thisMonth: thisMonthVendor ?? 0,
+                        lastMonth: lastMonthVenor ?? 0
                     },
 
                     retailer: {
 
                         total: totalRetailers ?? 0,
-                        thisMonth: thisMonthRetailers ?? 0
+                        thisMonth: thisMonthRetailers ?? 0,
+                        lastMonth: lastMonthRetailer ?? 0
                     },
 
                     salesExecutives: {
 
                         total: totalSalesExecutives ?? 0,
-                        thisMonth: thisMonthSalesExecutives ?? 0
+                        thisMonth: thisMonthSalesExecutives ?? 0,
+                        lastMonth: lastMonthSalesExecutives ?? 0
+
                     },
 
                     order: {
 
                         total: totalOrders ?? 0,
-                        thisMonth: thisMonthOrder ?? 0
+                        thisMonth: thisMonthOrder ?? 0,
+                        lastMonth: lastMonthVenor ?? 0
                     }
                 })
 
@@ -509,6 +518,554 @@ export const adminDashboardServices = {
 
 
     },
+
+
+
+
+    //  find revenue data full time line
+
+    getRevenueDetails: () => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+
+
+                function getDateRanges() {
+                    const now = new Date();
+
+                    // Today
+                    const todayStart = new Date(now);
+                    todayStart.setHours(0, 0, 0, 0);
+                    const todayEnd = new Date(now);
+                    todayEnd.setHours(23, 59, 59, 999);
+
+                    // Yesterday
+                    const yesterdayStart = new Date(todayStart);
+                    yesterdayStart.setDate(yesterdayStart.getDate() - 1);
+                    const yesterdayEnd = new Date(todayEnd);
+                    yesterdayEnd.setDate(yesterdayEnd.getDate() - 1);
+
+                    // This week (Monday–Sunday)
+                    const weekStart = new Date(todayStart);
+                    weekStart.setDate(weekStart.getDate() - weekStart.getDay()); // Sunday start
+                    const weekEnd = new Date(weekStart);
+                    weekEnd.setDate(weekEnd.getDate() + 7);
+
+                    // Last week
+                    const lastWeekStart = new Date(weekStart);
+                    lastWeekStart.setDate(lastWeekStart.getDate() - 7);
+                    const lastWeekEnd = new Date(weekStart);
+
+                    // This month
+                    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+                    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+                    // Last month
+                    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+
+                    // This year
+                    const yearStart = new Date(now.getFullYear(), 0, 1);
+                    const yearEnd = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
+
+                    // Last year
+                    const lastYearStart = new Date(now.getFullYear() - 1, 0, 1);
+                    const lastYearEnd = new Date(now.getFullYear() - 1, 11, 31, 23, 59, 59, 999);
+
+                    return {
+                        today: [todayStart, todayEnd],
+                        yesterday: [yesterdayStart, yesterdayEnd],
+                        thisWeek: [weekStart, weekEnd],
+                        lastWeek: [lastWeekStart, lastWeekEnd],
+                        thisMonth: [monthStart, monthEnd],
+                        lastMonth: [lastMonthStart, lastMonthEnd],
+                        thisYear: [yearStart, yearEnd],
+                        lastYear: [lastYearStart, lastYearEnd],
+                    };
+                }
+
+                async function getRevenueForRange(start: Date, end: Date) {
+
+
+
+                    const result = await SubOrder.aggregate([
+                        {
+                            $match: {
+                                paymentStatus: "paid",
+                                purchased_Date: { $gte: start, $lte: end }
+                            }
+                        },
+                        {
+                            $group: {
+                                _id: null,
+                                totalRevenue: { $sum: "$total_amount" }
+                            }
+                        }
+                    ]);
+
+                    return result.length > 0 ? result[0].totalRevenue : 0;
+                }
+
+                const ranges: any = getDateRanges();
+
+                const [
+                    totalRevenue,
+                    thisYear,
+                    lastYear,
+                    thisMonth,
+                    lastMonth,
+                    thisWeek,
+                    lastWeek,
+                    today,
+                    yesterday
+                ] = await Promise.all([
+                    // All time
+                    SubOrder.aggregate([
+                        { $match: { paymentStatus: "paid" } },
+                        { $group: { _id: null, totalRevenue: { $sum: "$total_amount" } } }
+                    ]).then(r => (r[0]?.totalRevenue ?? 0)),
+
+                    getRevenueForRange(ranges.thisYear[0], ranges.thisYear[1]),
+                    getRevenueForRange(ranges.lastYear[0], ranges.lastYear[1]),
+                    getRevenueForRange(ranges.thisMonth[0], ranges.thisMonth[1]),
+                    getRevenueForRange(ranges.lastMonth[0], ranges.lastMonth[1]),
+                    getRevenueForRange(ranges.thisWeek[0], ranges.thisWeek[1]),
+                    getRevenueForRange(ranges.lastWeek[0], ranges.lastWeek[1]),
+                    getRevenueForRange(ranges.today[0], ranges.today[1]),
+                    getRevenueForRange(ranges.yesterday[0], ranges.yesterday[1]),
+                ]);
+
+                resolve({
+                    revenue: {
+                        total: totalRevenue,
+                        thisYear,
+                        lastYear,
+                        thisMonth,
+                        lastMonth,
+                        thisWeek,
+                        lastWeek,
+                        today,
+                        yesterday
+                    }
+                });
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+        })
+    },
+
+    // get revenue data for graphical display
+
+    getRevenuedataGraphical: (filter: string) => {
+
+
+        return new Promise(async (resolve, reject) => {
+
+
+            try {
+
+
+                const now = new Date();
+                let groupId: any;
+                let startDate: Date;
+
+                switch (filter) {
+                    case 'day':
+                        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                        groupId = { hour: { $hour: "$createdAt" } };
+                        break;
+
+                    case 'week':
+                        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 28);
+                        groupId = { week: { $week: "$createdAt" } };
+                        break;
+
+                    case 'month':
+                        startDate = new Date(now.getFullYear(), 0, 1); // Jan 1st
+                        groupId = { month: { $month: "$createdAt" } };
+                        break;
+
+                    case 'year':
+                        startDate = new Date(now.getFullYear() - 4, 0, 1); // Last 5 years
+                        groupId = { year: { $year: "$createdAt" } };
+                        break;
+
+                    default:
+                        startDate = new Date(now.getFullYear(), 0, 1);
+                        groupId = { month: { $month: "$createdAt" } };
+                }
+
+
+                let result = []
+
+
+                result = await SubOrder.aggregate([
+                    {
+                        $match: {
+
+                            paymentStatus: "paid",
+                            createdAt: { $gte: startDate }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: groupId,
+                            totalRevenue: { $sum: "$total_amount" }
+                        }
+                    },
+                    { $sort: { "_id": 1 } }
+                ]);
+
+
+
+                if (result.length === 0) {
+
+                    resolve(result)
+                    return;
+                }
+
+
+                let formattedResult: number[] = [];
+
+                switch (filter) {
+                    case 'day':
+                        formattedResult = Array(24).fill(0);
+                        result.forEach(item => { formattedResult[item._id.hour] = item.totalRevenue; });
+                        break;
+                    case 'week':
+                        formattedResult = Array(4).fill(0);
+                        const currentWeek = Math.ceil(((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 7)));
+                        result.forEach(item => {
+                            const idx = (item._id.week - currentWeek + 4) % 4;
+                            formattedResult[idx] = item.totalRevenue;
+                        });
+                        break;
+                    case 'month':
+                        formattedResult = Array(12).fill(0);
+                        result.forEach(item => { formattedResult[item._id.month - 1] = item.totalRevenue; });
+                        break;
+                    case 'year':
+                        formattedResult = Array(5).fill(0);
+                        result.forEach(item => { formattedResult[item._id.year - startDate.getFullYear()] = item.totalRevenue; });
+                        break;
+                }
+
+                resolve(formattedResult);
+
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+
+        })
+    },
+
+    // get revenue data for role based filter
+
+    getSubScriptionCountDataByRole: (role: string) => {
+
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+
+                const result = await SubOrder.aggregate([
+
+                    {
+                        $lookup: {
+                            from: "subscriptionPlan",
+                            foreignField: "_id",
+                            localField: "planId",
+                            as: "planDetails"
+                        }
+                    },
+                    {
+                        $unwind: "$planDetails"
+                    },
+
+                    {
+                        $match: { "$planDetails.role": role, paymentStatus: "paid" }
+                    },
+
+                    {
+                        $group: {
+
+                            _id: "$planDetails.plan",
+                            count: { $sum: 1 }
+                        }
+                    },
+
+                    {
+                        $project: {
+
+                            _id: 1,
+                            count: 1
+                        }
+                    }
+                ])
+
+                resolve(result)
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+        })
+
+    },
+
+
+    // get revenue data for graphical display role based filter
+
+    getRevenuedataGraphicalByRole: (filter: string, role: string) => {
+
+
+        return new Promise(async (resolve, reject) => {
+
+
+            try {
+
+
+                const now = new Date();
+                let groupId: any;
+                let startDate: Date;
+
+                switch (filter) {
+                    case 'day':
+                        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                        groupId = { hour: { $hour: "$createdAt" } };
+                        break;
+
+                    case 'week':
+                        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 28);
+                        groupId = { week: { $week: "$createdAt" } };
+                        break;
+
+                    case 'month':
+                        startDate = new Date(now.getFullYear(), 0, 1); // Jan 1st
+                        groupId = { month: { $month: "$createdAt" } };
+                        break;
+
+                    case 'year':
+                        startDate = new Date(now.getFullYear() - 4, 0, 1); // Last 5 years
+                        groupId = { year: { $year: "$createdAt" } };
+                        break;
+
+                    default:
+                        startDate = new Date(now.getFullYear(), 0, 1);
+                        groupId = { month: { $month: "$createdAt" } };
+                }
+
+
+                let result = []
+
+
+                result = await SubOrder.aggregate([
+                    {
+                        $lookup: {
+                            from: "subscriptionPlan",
+                            foreignField: "_id",
+                            localField: "planId",
+                            as: "planDetails"
+                        }
+                    },
+                    {
+                        $unwind: "$planDetails"
+                    },
+
+
+                    {
+                        $match: {
+
+                            paymentStatus: "paid",
+                            "$planDetails.role": role,
+                            createdAt: { $gte: startDate }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: groupId,
+                            totalRevenue: { $sum: "$total_amount" }
+                        }
+                    },
+                    { $sort: { "_id": 1 } }
+                ]);
+
+
+
+                if (result.length === 0) {
+
+                    resolve(result)
+                    return;
+                }
+
+
+                let formattedResult: number[] = [];
+
+                switch (filter) {
+                    case 'day':
+                        formattedResult = Array(24).fill(0);
+                        result.forEach(item => { formattedResult[item._id.hour] = item.totalRevenue; });
+                        break;
+                    case 'week':
+                        formattedResult = Array(4).fill(0);
+                        const currentWeek = Math.ceil(((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 7)));
+                        result.forEach(item => {
+                            const idx = (item._id.week - currentWeek + 4) % 4;
+                            formattedResult[idx] = item.totalRevenue;
+                        });
+                        break;
+                    case 'month':
+                        formattedResult = Array(12).fill(0);
+                        result.forEach(item => { formattedResult[item._id.month - 1] = item.totalRevenue; });
+                        break;
+                    case 'year':
+                        formattedResult = Array(5).fill(0);
+                        result.forEach(item => { formattedResult[item._id.year - startDate.getFullYear()] = item.totalRevenue; });
+                        break;
+                }
+
+                resolve(formattedResult);
+
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+
+        })
+    },
+
+    // get revenue data by this month. role based filter
+
+    getRevenuedatabymonthByRole: (role: string) => {
+
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+
+
+                function getDateRanges() {
+                    const now = new Date();
+
+
+                    // This month
+                    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+                    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+                    // Last month
+                    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+
+
+                    return {
+
+                        thisMonth: [monthStart, monthEnd],
+                        lastMonth: [lastMonthStart, lastMonthEnd],
+
+                    };
+                }
+
+                async function getRevenueForRange(start: Date, end: Date) {
+
+
+
+                    const result = await SubOrder.aggregate([
+
+                        {
+                            $lookup: {
+                                from: "subscriptionPlan",
+                                foreignField: "_id",
+                                localField: "planId",
+                                as: "planDetails"
+                            }
+                        },
+                        {
+                            $unwind: "$planDetails"
+                        },
+                        {
+                            $match: {
+                                paymentStatus: "paid",
+                                "$planDetails.role": role,
+                                purchased_Date: { $gte: start, $lte: end }
+                            }
+                        },
+                        {
+                            $group: {
+                                _id: null,
+                                totalRevenue: { $sum: "$total_amount" }
+                            }
+                        }
+                    ]);
+
+                    return result.length > 0 ? result[0].totalRevenue : 0;
+                }
+
+                const ranges: any = getDateRanges();
+
+                const [
+                    totalRevenue,
+
+                    thisMonth,
+                    lastMonth,
+
+                ] = await Promise.all([
+                    // All time
+                    SubOrder.aggregate([
+
+                        {
+                            $lookup: {
+                                from: "subscriptionPlan",
+                                foreignField: "_id",
+                                localField: "planId",
+                                as: "planDetails"
+                            }
+                        },
+                        {
+                            $unwind: "$planDetails"
+                        },
+
+                        { $match: { paymentStatus: "paid", "$planDetails.role": role } },
+                        { $group: { _id: null, totalRevenue: { $sum: "$total_amount" } } }
+                    ]).then(r => (r[0]?.totalRevenue ?? 0)),
+
+
+                    getRevenueForRange(ranges.thisMonth[0], ranges.thisMonth[1]),
+                    getRevenueForRange(ranges.lastMonth[0], ranges.lastMonth[1]),
+
+                ]);
+
+                resolve({
+                    revenue: {
+                        total: totalRevenue,
+
+                        thisMonth,
+                        lastMonth,
+
+                    }
+                });
+
+            } catch (error: any) {
+
+                reject(error.message)
+            }
+        })
+
+
+    }
+
+
+
+
+
 
 
 }
